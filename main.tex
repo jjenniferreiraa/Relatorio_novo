@@ -1,0 +1,77 @@
+% !TeX encoding = UTF-8
+
+\pdfminorversion=7
+
+\documentclass{lccvreport}
+
+% Arquivo com os pacotes a serem utilizados
+\input{pacotes}
+% Arquivo com as informações da capa do projeto
+\input{texto/capa}
+
+\addbibresource{bibliografia.bib}
+
+\begin{document}
+
+\maketitle
+
+% Aquivo de controle de versão
+%\input{texto/controle_revisao}
+
+% NÃO MODIFICAR! Criação do sumário.
+\tableofcontents\pdfbookmark[0]{Table of Contents}{toc}
+
+% Arquivo com as informações do projeto, contratante, contratado e instituições financeiras envolvidas
+\input{texto/apresentacao}
+
+% Resumo do projeto (informação retirada da proposta do projeto ou SIGITEC)
+%\input{texto/resumo}
+
+% Acompanhamento (Apresentação de metas e atividades executadas)
+\input{texto/acompanhamento}
+
+% Introdução (Informações normalmente retiradas da proposta do projeto ou SIGITEC)
+%\input{texto/introducao}
+
+% Metodologia
+%\input{texto/metodologia}
+
+% Resultados
+%\input{texto/resultados}
+
+% Considerações
+%\input{texto/consideracoes}
+
+% Introduzir aqui os capítulos adicionais do documento
+% \input{texto/nomedocapitulo} %criar o arquivo nomedocapitulo.tex na pasta includes
+
+% Apêndices, NÃO MODIFICAR A LINHA ABAIXO
+\appendix
+
+%\chapter{SEST Solos: Alterações e Implementação de novas funcionalidades}
+%\label{chap:SestSolos}
+%\input{texto/chapter_solos}
+
+%\chapter{SIMCON: Alterações e Implementação de novas funcionalidades}
+%\label{chap:Simcon}
+%\input{texto/chapter_simcon}
+
+%\chapter{SEST SAL: Alterações e Implementação de novas funcionalidades}
+%\label{chap:SestSal}
+%\input{texto/chapter_sestsal}
+
+\chapter{Modelagem Computacional de Cravação de Revestimento Condutor}
+\label{chap:cravacao}
+\input{texto/chapter_cravacao}
+
+\chapter{Modelagem Computacional da Instalação de Revestimento Condutor por Jateamento}
+\label{chap:jateamento}
+\input{texto/chapter_jateamento}
+
+\cleardoublepage
+\phantomsection
+
+\addcontentsline{toc}{chapter}{Bibliografia}
+\printbibliography
+
+\end{document}

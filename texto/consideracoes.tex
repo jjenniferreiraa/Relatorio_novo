@@ -1,0 +1,65 @@
+% \begin{comment}%\chapter{Considerações Parciais/Finais e Recomendações}
+
+%Conforme descrito, a execução do projeto foi subdividida em etapas associadas a um cronograma de execução. Dessa forma, tem-se a cada relatório um acompanhamento da evolução de desenvolvimento por meio de um percentual de execução. De forma resumida, serão descritas nesse capítulo as considerações relativas a cada etapa de desenvolvimento executada dentro do período definido para esse relatório. Ressalta-se que, conforme apresentado no Capítulo anterior, os resultados e discussões para as atividades realizadas estão no Apêndices seguintes.
+
+%Para o presente relatório, conforme indicado no cronograma, ficou determinada a execução das atividades A0.1, A0.2, A0.3, A1.1, A1.2, A1.3, A1.4, A1.5, A3.1, A3.2, A4.1, A4.2 e A6.
+
+%\section{Mobilização da equipe, planejamento das atividades e reunião de abertura}
+
+%A equipe contratada é apresentada na Tabela \ref{tab::equipe} e é composta por um coordenador, 16 pesquisadores e 4 bolsistas de graduação. A equipe foi subdividida de acordo com cada etapa do projeto.
+
+%\begin{table}[H]
+%	\centering
+%	\begin{tabularx}{\hsize}{|l|l|l|l|l|} 
+%		\hline
+%		\multicolumn{1}{|c|}{\textbf{Nome}} & \multicolumn{1}{X|}{\textbf{Período (em meses)}} & \multicolumn{1}{X|}{\textbf{Carga Horária semanal}} & \multicolumn{1}{X|}{\textbf{Função}} & \multicolumn{1}{X|}{\textbf{Vínculo principal}} \\ \hline
+%		João Paulo Lima Santos & 36 & 2 & Coordenador & UFAL \\ \hline
+%		Aline da Silva Ramos Barboza & 36 & 2 & Pesquisador & UFAL \\ \hline
+%		Eduardo Toledo de Lima Junior & 36 & 2 & Pesquisador & UFAL \\ \hline
+%		Eduardo Nobre Lages & 36 & 2 & Pesquisador & UFAL \\ \hline
+%		Jose Luis Gomes Marinho & 36 & 2 & Pesquisador & UFAL \\ \hline
+%		Luciana Correia Laurindo Martins Vieira & 36 & 2 & Pesquisador & UFAL \\ \hline
+%		Lucas Pereira de Gouveia & 36 & 2 & Pesquisador & UFAL \\ \hline
+%		Beatriz Ramos Barboza & 18 & 40 & Pesquisador &  LCCV\\ \hline
+%		Christiano Augusto Ferrario Várady Filho & 36 & 40 & Pesquisador & LCCV \\ \hline
+%		Jennifer Mikaella Ferreira Melo & 18 & 20 & Pesquisador & LCCV \\ \hline
+%%		Joyce Kelly França Tenório & 18 & 20 & Pesquisador & LCCV \\ \hline
+%		Raniel Deivisson de Alcantara Albuquerque & 18 & 20 & Pesquisador & LCCV \\ \hline
+%		Natália de Carvalho Souza dos Santos & 18 & 20 & Bolsista-Graduação & LCCV \\ \hline
+%		Júlia Beatriz Ferreira Souza & 18 & 20 & Bolsista-Graduação & LCCV \\ \hline
+%	\end{tabularx}
+%\caption{Equipe do projeto.}
+%\label{tab::equipe}
+%\end{table}
+
+%O planejamento das atividades refletiu-se na execução do cronograma e a reunião de abertura foi realizada em 01 de outubro de 2018.
+
+%\section{Aferição de parâmetros do solo a partir de modelos estatísticos}
+
+%O processo de aferição objetiva a definição dos valores que caracterizam de maneira precisa o comportamento mecânico do solo. Nesse aspecto, a metodologia de aferição seleciona os dados mais interessantes e retira fontes de ruídos (também denominados \textit{outliers} por se localizarem fora da curva modelada do comportamento). 
+
+%Todo o processo de revisão bibliográfica, aplicação de metodologia para caracterização estatística de parâmetros do solo ao longo da profundidade, bem como a realização de ajustes com eliminação de \textit{outliers} seguindo a metodologia indicada pela DNV-RP-C207 \cite{dnvrpc207} e baseando-se em intervalo de confiança foi executada. Ressalta-se que também foi inserido um método numérico para classificação do solo que apresentou resultados muito próximos dos apresentados fornecidos pela empresa (RAGIP). Ressalta-se que as formulações foram implementadas em algoritmo computacional e resultados referentes aos campos de Búzios e Tartargura Mestiça foram avaliados. Maiores informações sobre a teoria e os resultados podem ser conferidas no Apêndice \ref{chap:estatistica} e sobre o código no Apêndice \ref{chap:codigo}.
+
+%\section{Metodologia para estimativa espacial de parâmetros de solo com base em geoestatística}
+
+%O emprego da geoestatística visa a estimativa de parâmetros geotécnicos para determinado local baseando-se nas informações de outros furos ponderadas a partir da sua localização geográfica. A revisão de literatura, com aplicação da formulação clássica dos modelos de correlação, montagem de semivariogramas experimentais (conforme \citet{matheron1963}) e robustos (conforme \citet{cressie} e \citet{dowd}), além da formulação de krigagem ordinária e universal já estão delimitadas e funcionais. Em outro aspecto, a geração do perfil geotécnico de um poço virtual está desenvolvida e os primeiros resultados estão incorporados ao Apêndice \ref{chap:geoestatistica}. Os procedimentos de correlação, geração do semivargiograma e ajustes esférico, exponencial e potencial foram implementados. Toda formulação foi implementada em ambiente computacional desenvolvido em linguagem Python, cuja documentação está inserida no Anexo \ref{chap:codigo}.
+
+%\section{Módulos para avaliação de parâmetros do solo para integração do sistema PoçoWeb}
+
+%As metodologias de aferição e estimativas são implementadas em um módulo computacional para análise e cálculo de parâmetros para quaisquer ensaios CPTs de furos inseridos no sistema. Basicamente, é o produto a ser utilzado. Um algoritmo computacional para aferição de parâmetros de solo usando técnicas estatísticas e geoestatísticas está em fase final de testes com todos os dados geotécnicos enviados. Até o presente momento, o código apresenta a estrutura modular de uma biblioteca em Python, já executando os procedimentos estatísticos e geoestatísticos propostos para o presente projeto. Nesse aspecto, o leitor é direcionado para os Apêndices \ref{chap:estatistica}, \ref{chap:geoestatistica} e \ref{chap:codigo} para maiores informações. 
+
+%\section{Revisão Bibliográfica sobre jateamento e cravação de sistemas de revestimento condutor}
+
+%O estudo de técnicas de modelagem computacional de processo de perfuração prenunciam a própria modelagem do fenômeno estudado. A revisão de literatura sobre jateamento encontra-se finalizada, com separação de modelagens de interesse ao processo de análise fluidodinâmica, a exemplo do modelo desenvolvido por \citet{wang2014numerical}. A revisão de literatura para modelos de cravação também encontra-se finalizada. Informações técnicas detalhadas sobre as revisões podem ser encontradas nos Apêndices \ref{chap:cravacao} e \ref{chap:jateamento}.  
+
+%\section{Modelagem Numérica da Cravação de Revestimento Condutor}
+
+%Atualmente, a modelagem está sendo realizada aplicando a técnica numérica de acoplamento de malhas eulerianas e lagrangeanas (\textit{Coupling Eulerian Lagrangian Technique} - CEL). A integração entre as malhas, com indicativo de proporcionalidade do volume total de solo estudado, permite que a captação de dados da modelagem levando em consideração a parcelas sólidas (particuladas) e líquida (poropressão) do solo como um todo. Nesse sentido, o modelo constitutivo adotado para a representação do solo é Mohr-Coulomb. As modelagens estão em fase de validação e aplicação no modelo de cravação. Maiores informações sobre os resultados e sua discussão estão inseridos no Apêndice \ref{chap:cravacao}.
+
+%\section{Modelagem Numérica de Operações de Jateamento}
+
+%A partir da revisão de literatura sobre cravação de revestimento condutor por jateamento, algumas análises iniciais foram realizadas no Abaqus com o principal objetivo de compreensão do processo de modelagem. Um modelo de acoplamento sólido-fluido foi montado tendo como dados de entrada campos de velocidade e pressão para a fase fluida, e dados de tensão para a região sólida. Adicionalmente, foi fornecido pela Petrobras um modelo do domínio fluido de uma broca tricônica, que serviu para a geração de fluxos em regimes linear e turbulento empregando a modelagem $k-\epsilon$ e Spallart-Allmaras para regimes turbulentos. 
+
+
+%Na literatura é possível encontrar duas modelagens distintas para a dinâmica de solos: utilizando equacionamento proveniente da dinâmica dos fluidos ou atráves da mecânica dos sólidos tradicional. Após estudos e experimentações sobre qual a abordagem melhor encaixaria aos objetivos do projeto, optou-se por tratar a problematica da cravação por jateamento com o solo sendo modelado pela mecânica do sólidos tradicional. O jato, por sua vez, seguiu sendo simulado atráves da equação de Boltzmann. Maiores informações sobre os resultados e discussões obtidos estão inseridos no Apêndice \ref{chap:jateamento}.
+% \end{comment}

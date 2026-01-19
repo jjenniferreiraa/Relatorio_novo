@@ -1,0 +1,98 @@
+%Toda a introdução pode ser retirada da proposta do projeto (o pdf do SIGITEC). Nesse pdf todas as seções abaixo estão detalhadas, basta copiar e colar aqui, mantendo as citações, se houverem.
+\chapter{Introdução}
+
+\setlength{\headheight}{50pt}
+
+No projeto de P,D\&I intitulado "Técnicas de modelagem numéricas aplicadas a estimativa de propriedades do solo para projetos de poços de petróleo'' (SAP 4600564610), executado em parceria pelo Centro de Pesquisas da PETROBRAS (CENPES/PETROBRAS) e o Laboratório de Computação Científica e Visualização da Universidade Federal de Alagoas (LCCV/UFAL), foram desenvolvidos estudos e implementações para apoio ao dimensionamento de sistemas de projeto de início de poço. Em outros desenvolvimentos do LCCV/UFAL, foram construídas metodologias e implementadas ferramentas para avaliação de perfuração em rochas salinas. No presente projeto, serão desenvolvidas novas metodologias para apoio a projetos na fase de início de poço e na perfuração de rochas salinas, sendo incorporadas nos sistemas computacionais denominados SEST SAL, SEST SOLOS e SIMCON, hospedados no ambiente colaborativo POÇOWEB, o qual congrega diversas ferramentas utilizadas em projeto de poços na PETROBRAS.
+
+Segundo Lacasse et al. (2007), os solos naturalmente apresentam propriedades variáveis devido ao próprio processo de formação, o que acarreta incertezas em suas características mecânicas. Para avaliação de técnicas de projeto de início de poço em regiões com cenários geológicos complexos envolvendo diferentes intercalações de argila e areia, a atividade de "cálculo incremental da capacidade de carga ao longo da profundidade" mostra-se importante para garantia de integridade de sistemas de revestimento condutor-superfície. Além disso, atualizações na "modelagem de solos considerando incertezas dos ensaios" e desenvolvimento de "Estudos para aplicação de técnicas de aprendizado de máquina na modelagem de solos" tornam-se elementos importantes de projeto de revestimento condutor-superfície, pois auxiliam no processo de tomada de decisão e quantificação de incertezas, além de seguir as diretrizes de metodologias consagradas na indústria, a exemplo da DNV-RP-C207 (2012).
+
+A atualização de metodologias para caracterização do perfil de resistência mecânica de solos visando projeto de início de poço é importante para tornar mais fidedignas as estimativas de projeto. Nesse sentido, o cálculo de capacidade de carga de solo com consideração de adensamento térmico torna mais confiável as estimativas no sistema SOLOS para poços injetores ao considerar no cálculo eos gradientes térmicos envolvidos na fase de operação. Da mesma forma, a incorporação da influência na capacidade de carga do solo de efeitos de vibração do motor no caso de instalação de condutor jateado mostra-se como uma atividade importante frente as crescentes demandas de operações de jateamento na indústria.
+
+A avaliação de integridade do revestimento condutor deve ser realizada a partir de uma análise acoplada entre a capacidade de carga do solo (mensurada a partir da estimativa da resistência ao cisalhamento não drenado do solo) e a integridade mecânica do sistema de revestimento do poço. O revestimento condutor deve resistir aos esforços conjuntos provocados pelo peso do próprio sistema e cargas na fase de operação, bem como pelos esforços adicionais transferidos pelo riser na fase de perfuração. Nesse contexto, o presente projeto propõe o desenvolvimento de métodos e ferramentas para "análise estrutural e de estabilidade geotécnica de condutores cravados". Também estão previstas atualizações do elemento finito usado no SIMCON para avaliar rotação na cabeça de poço por meio da integração de carregamentos laterais, que visa o estudo e desenvolvimento de metodologia para avaliação da interação solo-revestimento, com base nas reações laterais e axiais do sistema solo-revestimento. Também estão propostos no corrente projeto o aprimoramento de modelo mecano-fiabilístico com base em dados do solo e cenários de carregamento, de maneira a trazer ao projetista informações complementares de probabilidade de falha da estrutura. No sistema SIMCON, também serão desenvolvidas atividades visando o aprimoramento de avaliação de desgaste em condutor com integração completa com o sistema de avaliação de desgaste em revestimento desenvolvido pela UFAL - SIMWEAR, além  emprego de perfilagens na construção do modelo em elementos finitos e caracterização estatística do desgaste.
+
+O sistema para geração da chamada folha executiva permitirá especificar a demanda de compra/reserva de tubos e equipamentos de forma integrada aos sistemas de projeto de início de poço (SOLOS e SIMCON) e comunicando-se com outras ferramentas de well supply. Esta integração com outros sistemas de projetos de poços trará conformidade e robustez na troca de informações entre diferentes ferramentas hospedadas no ambiente POÇO WEB, contribuindo com o processo colaborativo que se estende desde os primeiros insumos até a emissão final do projeto.
+
+O processo de instalação do revestimento condutor não é padronizado, seguindo na maioria das vezes a experiência de cada operador.  Dessa forma, o desenvolvimento de estudos experimentais e numéricos, a exemplo dos trabalhos desenvolvidos por P. JeanJean (2009), tornam-se elementos fundamentais para o processo de tomada de decisão. Nesse contexto, no presente projeto propõe-se o desenvolvimento de estudos numéricos ligados as operações de jateamento do revestimento condutor, bem como modelagem de cravação de Base Torpedo, especialmente realizados a partir de métodos meshless como, por exemplo, o Material Point Method.
+
+O simulador SEST SAL permite a previsão do fechamento de poços verticais em função do efeito de fluência da rocha salina na fase de perfuração. Essa previsão auxilia a escolha do peso do fluido de perfuração na fase salina e a decisão acerca de repasses que podem ser necessários. Este simulador está integrado também à ferramenta para acompanhamento da perfuração em tempo real (PWDA). Atualmente o simulador SEST SAL implementa apenas o estágio de fluência secundária, no entanto, diferentes trabalhos são encontrados na literatura confirmando que a maior parte das deformações viscosas das rochas salinas durante a perfuração de poços ocorre nesse estágio. Porém, alguns casos de aprisionamento de broca são reportados instantes após a perfuração de algumas camadas salinas, e a modelagem considerando apenas o estágio secundário de fluência não consegue mapear esses aprisionamentos. Dessa forma, a incorporação de uma lei de fluência primária poderá aumentar a precisão da previsão do fechamento desses poços, identificando esses casos em que a rocha fecha rapidamente nos primeiros momentos após ser perfurada. Propõe-se então a realização de um estudo para identificar uma lei de fluência primária para rochas salinas, e então calibrar seus coeficientes para rochas salinas brasileiras.
+
+Em relação ao comportamento de rochas salinas, propõe-se também o estudo e a incorporação de uma lei de fluência terciária ao simulador SEST SAL, a qual   deve representar o aumento na taxa de deformação e a ocorrência de dano na resposta a longo termo do material.  Além do apoio ao uso do simulador SEST SAL pela equipe do PWDA, um recurso importante é a consideração da lei de fluência primária e fluência terciária discutida. Mas, por atuar no momento da perfuração a lei de fluência primária deve ter maior importância para o PWDA por ocorrer nos primeiros instantes de exposição da rocha. Outras melhorias ou necessidades de ajustes podem ser identificadas ao longo do desenvolvimento do projeto.
+
+Também está previsto a incorporação de um módulo computacional para recomendação de repasses e do peso do fluido de perfuração em rochas salinas. É proposto neste item uma técnica computacional onde automaticamente se experimente diferentes valores de peso de fluido, a partir de um intervalo de valores por exemplo, fornecendo ao usuário informações acerca do número de repasses necessários para os diferentes pesos de fluido considerados. Essa ferramenta deve servir de apoio a decisão sobre a estratégia a ser adotada na perfuração, acelerando o processo de experimentação. Também se propõe no presente projeto a calibração de modelo de fluência salina com retroanálise de prisão de colunas de perfuração na fase salina a partir de dados de falhas operacionais.
+
+Durante a realização de Leak Off Tests (LOT) e após sua finalização (LOT), pode ser possível a ocorrência de crescimento de pressão no anular (Annular Pressure Buildup - APB) devido à elevação de temperatura e à fluência das rochas salinas. A partir de dados de campo, os fenômenos envolvidos devem ser estudados e equações constitutivas devem ser experimentadas. Anomalias foram observadas no APB em regiões salinas onde foram realizados LOT. Nessa etapa se propõe a estudar, desenvolver, e calibrar a partir de dados de campo, uma estratégia para modelagem e previsão desse comportamento. Essa modelagem será incorporada ao simulador computacional de APB já em desenvolvimento no LCCV. Ao final do projeto, a ferramenta computacional desenvolvida a partir desses estudos será incorporado ao POÇO WEB.
+
+O uso frequente dos sistemas SEST SAL, SOLOS E SIMCON nos últimos anos, aliado à perspectiva de aumento constante nessa demanda, bem como a própria evolução do ambiente POÇO WEB, apontam para a necessidade de atualização de alguns recursos e tecnologias computacionais utilizados atualmente. Como exemplo, serão feitos a migração da versão da linguagem de programação Python empregada, a implementação da arquitetura baseada em contêineres (kubernetes, por exemplo) e a mudança no framework para desenvolvimento web.
+
+Por fim, ressalta-se que este projeto visa dar continuidade a estudos e desenvolvimentos iniciados em projetos de P,D\&I anteriores, reafirmando a parceria entre o CENPES/PETROBRAS e o LCCV/UFAL. Este projeto contribui de forma significativa no desenvolvimento de operações de início de poço, perfuração em rochas salinas e na gestão de integridade ao longo da vida operacional, visando atendimento de normativos de segurança operacional, em especial a Resolução ANP n° 46/2016, que institui o Regime de Segurança Operacional para Integridade de Poços de Petróleo e Gás Natural e aprova o Regulamento Técnico do Sistema de Gerenciamento da Integridade de Poços (SGIP).
+
+\section{Objetivo Geral}
+
+O objetivo deste projeto é o desenvolvimento de métodos e ferramentas para avaliação de integridade na fase de perfuração de zonas salinas e para gestão de sistemas de início de poço (solo-revestimento), permitindo a elaboração de projetos de poços de petróleo seguros e confiáveis.
+
+\subsection{Objetivos Específicos}
+
+\begin{itemize}
+\item Estudo e desenvolvimento de metodologias para cálculo de capacidade de carga em solos com foco em projeto de início de poço
+considerando efeitos de adensamento térmico;
+
+\item  Incorporação da influência na capacidade de carga do solo de efeitos de vibração do motor no condutor jateado;
+
+\item  Atualizações na modelagem de solos considerando incertezas nos dados dos ensaios;
+
+\item Estudos e desenvolvimentos para aplicação de técnicas de aprendizado de máquina na modelagem e caracterização de solos;
+
+\item Análise estrutural e de estabilidade geotécnica de condutores cravados;
+
+\item Otimização de instalação de condutor cravado;
+
+\item Aprimoramento de modelo em elementos finitos para interação de sistema solo-condutor;
+
+\item Aprimoramento de avaliação de desgaste em condutor;
+
+\item Aprimoramento de modelo mecano-fiabilístico no sistema condutor/superfície com base em dados de solos e de fabricação de revestimentos;
+
+\item  Geração automática de folha executiva de início de poço e quantificação de demanda de compra/reserva de tubos e equipamentos da fase de início de poço;
+
+\item Estudos numéricos para otimização de instalação de condutor por jateamento e cravação;
+
+\item Aprimoramento de simulador de fluência em rocha salina no sistema SEST SAL;
+
+\item Elaboração de módulo computacional para recomendação de repasses e do peso do fluido de perfuração em rochas salinas;
+
+\item  Manutenção e melhorias no módulo SEST SAL integrado ao PWDA;
+
+\item Modelagem do Leak off Test (LOT) em regiões com rochas salinas;
+
+\item Calibração de modelo de fluência salina com retroanálise de dados de prisão de coluna de perfuração;
+
+\item  Atualização dos recursos e tecnologias computacionais utilizados no sistema SEST SAL, SIMCON e SOLOS, incluindo atualização da versão do Python, aprimoramento da coordenação da arquitetura baseada em contêineres e mudanças no framework para desenvolvimento web;
+\end{itemize}
+
+\section{Resultados Esperados}
+
+\begin{table}[h]
+	\begin{tabularx}{\textwidth}{|X|c|}
+		\hline
+		\rowcolor[HTML]{C0C0C0}
+		{\color[HTML]{000000} \textbf{Descrição do Resultado}}  & {\color[HTML]{000000} \textbf{Tipo de Resultado}} \\ \hline
+		Desenvolvimento de estudos numéricos ligados a operação instalação de
+		revestimento condutor & Conhecimento Produzido \\ \hline
+		Desenvolvimento de técnicas para integração entre ferramentas de projetos de poços de petróleo & Método \\ \hline
+		Desenvolvimento de sistema de monitoramento integridade de poços na
+		perfuração de rochas salinas & Produto \\ \hline
+		Disponibilização de módulos computacionais para avaliação de parâmetros do solo
+		com foco em projeto de início de poço & Produto \\ \hline
+		Disponibilização de módulos computacionais para avaliação do sistema de
+		revestimento condutor com base em modelo confiabilístico & Produto  \\ \hline
+	\end{tabularx}
+\end{table}
+
+%\section{Benefícios para a Indústria}
+
+%Aqui colocar o conteúdo de Benefícios para a Indústria
+
+\section{Mecanismo de Acompanhamento da Execução}
+
+O desenvolvimento do projeto é acompanhado por meio de relatórios técnicos,conforme cronograma definido, descrevendo as atividades realizadas e os resultados obtidos. Reuniões entre a equipe executora, a coordenação do projeto no CENPES/PETROBRAS e clientes finais da PROJ-PERF ocorrem com periodicidade quinzenal, virtualmente, permitindo a avaliação do trabalho realizado. Novas versões das ferramentas computacionais previstas serão disponibilizadas ao longo do projeto, incluindo a incorporação de ajustes pautados pelas demandas e sugestões do corpo técnico e científico da PETROBRAS.

@@ -1,0 +1,92 @@
+%%%%%%%%%%%%%%%%%%%%%%
+%%% DADOS GERAIS DO PROJETO
+
+\setlength{\headheight}{50pt}
+
+%Aqui colocar a data de início do projeto
+\def\inicioprojeto{01 de julho de 2023}
+%Aqui colocar a duração do projeto
+\def\duracaoprojeto{36 meses}
+\def\coordenador{\getcoordinator}
+%Aqui colocar o CPF do coordenador(a) do projeto
+\def\coordenadorCPF{039.083.094-17}
+%Aqui colocar a função do coordenador(a) do projeto (por ex: professor titular, professor adjunto 1, etc...)
+\def\funcao{Professor Adjunto}
+%Aqui colocar o regime de contratação
+\def\regime{Dedicação exclusiva}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% 	DADOS DO LABORATÓRIO
+\def\lccv{Laboratório de Computação Científica e Visualização - LCCV}
+
+\def\ufal{Universidade Federal de Alagoas - UFAL}
+\def\ufalCNPJ{24.464.109/0001-48}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% DADOS DA FUNDAÇÃO - aqui colocou-se os dados da fundepes
+%caso outra fundação seja utilizada, modificar de acordo
+\def\fundepes{Fundação Universitária de Desenvolvimento de Extensão e Pesquisa - FUNDEPES}
+\def\fundepesCNPJ{12.449.880/0001-67}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% DADOS DA EMPRESA CONTRATANTE DO PROJETO - aqui
+% utilizou-se a petrobrás como exemplo, caso outra empresa seja a contratante modificar
+% de acordo
+\def\financiador{Petróleo Brasileiro S.A. - PETROBRAS}
+\def\financiadorCNPJ{33.000.167/0001-01}
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% APRESENTAÇÃO
+
+\chapter*{Apresentação}
+
+O presente relatório refere-se ao projeto de pesquisa intitulado \gettitle, o qual teve sua contratação realizada em \inicioprojeto, com duração prevista de 36 meses. %Em 21/07/2021, o projeto foi aditivado para realização de atividades  complementares, perfazendo um prazo total de execução de \duracaoprojeto.
+As informações gerais de identificação do projeto são apresentadas a seguir:
+
+
+\begin{center}
+\footnotesize
+\begin{tabular}{| p{11.5cm} | p{3cm} |}
+\hline
+\multicolumn{2}{|c|}{\textbf{DADOS GERAIS DAS INSTITUIÇÕES ENVOLVIDAS}} \\
+\hline
+\textbf{Concedente:} & \textbf{CNPJ:}   \\
+\financiador         & \financiadorCNPJ \\
+\hline
+\textbf{Convenente:} & \textbf{CNPJ:}   \\
+\fundepes            & \fundepesCNPJ    \\
+\hline
+\textbf{Proponente:} & \textbf{CNPJ:}   \\
+\ufal                & \ufalCNPJ        \\
+\hline
+\end{tabular}
+
+
+\begin{tabular}{| p{7.25cm} | p{7.25cm} |}
+\hline
+\multicolumn{2}{|c|}{\textbf{DADOS GERAIS DO PROJETO}}      \\
+\hline
+\multicolumn{2}{|p{14.5cm}|}{\textbf{Título do projeto:}}   \\
+\multicolumn{2}{|p{14.5cm}|}{\gettitle}                     \\
+\hline
+\textbf{Início do projeto:} & \textbf{Período de execução:} \\
+\inicioprojeto              & \duracaoprojeto               \\
+\hline
+\textbf{Processo:}          & \textbf{No. PT:}              \\
+\getprocessnumber           & \getptnumber                  \\
+\hline
+\textbf{No. SAP:}           & \textbf{No. Jurídico:}        \\
+\getsapnumber               & \getlegalnumber               \\
+\hline
+\textbf{Coordenador:}       & \textbf{CPF:}                 \\
+\coordenador                & \coordenadorCPF               \\
+\hline
+\textbf{Função:}            & \textbf{Regime de trabalho:}  \\
+\funcao                     & \regime                       \\
+\hline
+\textbf{Instituição:}       & \textbf{Departamento:}        \\
+\ufal                       & \lccv                         \\
+\hline
+\end{tabular}
+\end{center}

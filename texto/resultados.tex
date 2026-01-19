@@ -1,0 +1,108 @@
+\chapter{Resultados e Discussão}
+
+\setlength{\headheight}{50pt}
+
+Os resultados e discussões das etapas desenvolvidas deste projeto estão apresentadas nos Apêndices de A a L.
+%\section{Aferição de Parâmetros do Solo a partir de Modelos Estatísticos}
+
+%Ao se deparar com meios altamente heterogêneos, análises estatísticas e estudos sobre a variabilidade de parâmetros auxiliam na tomada de decisão com confiabilidade. Sendo assim, uma metodologia para estimativa de parâmetros de solo a partir de modelos estatísticos para aplicação em projetos de poços petróleo, focando na fase inicial de execução, é apresentada no apêndice \ref{chap:estatistica}.
+
+%A partir desta metodologia, determinada através dos estudos das normas e da literatura, dados de 16 ensaios CPTu foram analisados. Como resultado, pontua-se que a recomendação da NORSOKG-001 retorna valores característicos mais altos, Lacasse et al. \cite{lacasse2007statistical} valores localizados como um limite inferior da NORSOKG-001 e a DNV-RP-C207 apresenta um desempenho dependente do parâmetro geotécnico analisado.
+
+%Tratando-se de classificação do solo a partir do CPTu, a metodologia de Jefferies \& Davies \cite{jefferies1993use} fornece resultados satisfatórios. Sendo esta a escolha para as futuras etapas do trabalho.
+
+%\section{Extrapolação de Dados de Resistência Não Drenada}
+
+%No apêndice \ref{chap:extrapolacao}, motivado pela necessidade da obtenção dos valores de resistência do solo em profundidades superiores às alcançadas pelo ensaio de piezocone, metodologias de extrapolação da resistência não drenada são selecionadas. Tais estratégias consistem em métodos analíticos e redes neurais, que é um método de inteligência artificial. Para a classificação do solo utilizou-se o trabalho de Jefferies \& Davies \cite{jefferies1993use}, escolha baseada no resultado obtido em estágio anterior desta pesquisa.
+
+%Como resultado, as metodologias analíticas se mostraram mais considerando o custo computacional e o erro das soluções comparadas. Vale ressaltar também que a heterogeneidade e a qualidade dos dados a serem extrapolados tem relação direta com o resultado.
+
+%\section{Metodologia para Estimativa Espacial de Parâmetros do Solo com Base em Geoestatística}
+
+%O estudo de confiabilidade fornece ao tomador de decisões ferramentas para lidar racionalmente com incertezas presentes na execução de projetos. Sendo assim, no apêndice \ref{chap:geoestatistica} é apresentado uma metodologia baseada em geoestatística para a estimativa e análise de parâmetros de solo.
+
+%Após a revisão bibliográfica, onde os principais conceitos e formulações sobre variogramas e krigagem foram apresentados, iniciou-se a fase de implementação dos principais semivariogramas e ajustes com o intuito de entender a influência dos poços vizinhos no poço virtual. Em seguida, os modelos de krigagem foram desenvolvidos e validados. Tais etapas são de extrema importância para a geração dos perfis virtuais capazes de auxiliar corretamente as decisões de projeto.
+
+%\section{Módulos para Avaliação de Parâmetros de Solo para Integração no Sistema PoçoWeb}
+
+%Na presente etapa descrita no anexo \ref{chap:codigo}, o código computacional desenvolvido para a análise e cálculo dos indicadores utilizados no projeto de poço é destrinchado. Além do diagrama UML código, esta seção serve também como uma documentação para consulta, uma vez que explica todas as funções e atributos da classe CPT.
+
+%\section{Modelagem Computacional de Cravação de Revestimento Condutor}
+
+%A cravação consiste em um estágio inicial para a instalação do revestimento condutor. O apêndice \ref{chap:cravacao} é destinado para a apresentação de uma revisão bibliográfica e uma metodologia para a modelagem do procedimento, bem como a reprodução de modelos presentes na literatura através do software ABAQUS.
+
+%A modelagem da cravação é dividida em duas etapas: cravação por peso próprio e cravação por martelamento. A cravação por peso próprio é sensível a primeira resistência de contato entre o solo e o condutor, já por martelamento, o esforço aplicado no condutor vem através de carregamentos de ondas.
+
+%Como resultado, uma metodologia a ser seguida foi apresentada, da mesma maneira que o modelo constitutivo que representará o solo foi definido: Mohr-Coulomb. Por se tratar de um caso que lida com grandes deformações e grandes deslocamentos, duas abordagens são possíveis de serem adotadas (CEL ou ALE) para a simulação computacional, tal decisão dependerá de qual a magnitude do caso a ser simulado. Sendo assim, a próxima demanda será o desenvolvimento da modelagem da operação de Papa-Terra.
+
+%\section{Modelagem Numérica de Jateamento}
+
+%Além da instalação do revestimento condutor por cravação, outra técnica amplamente utilizada é o jateamento. A instalação por jateamento é geralmente realizada em solos com camadas de sedimentos não consolidados. Com o impacto do jato estes sedimentos são carreados, abrindo espaço para a passagem do condutor.
+
+%No apêndice \ref{chap:jateamento} uma revisão bibliográfica com foco na modelagem do problema é apresentada, seguida de uma metodologia e da modelagem de estudos de casos baseados na literatura. Tais modelagens foram executadas no software XFLOW, que trata a fase fluida através do Método de Lattice Boltzman e no ABAQUS.
+
+%Duas estratégias diferentes foram utilizadas para a representação do solo, a primeira tratando o como um fluido altamente viscoso e a segunda através de uma abordagem sólida. Como resultado chegou-se a conclusão de que apesar da abordagem fluida apresentar resultados promissores, a validação do modelo não é possível com os dados que a equipe executora possui. Sendo assim, neste trabalho o solo será modelado como sólido.
+
+%\section{Modelagem Mecano-fiabilística aplicada à Projeto de Poço}
+
+%O revestimento condutor exerce papel fundamental na transmissão de esforços da cabeça de poço para o solo. Sendo assim, é de extrema valia avaliar integridade do sistema solo-revestimento para a elaboração de poços seguros.
+
+%O anexo \ref{chap:confiabilidade} apresenta uma revisão bibliográfica que embasa o desenvolvimento de um modelo mecano-fiabilístico. Tal etapa tem o intuito de fundamentar conceitos básicos a fim de facilitar o avanço na integração do SIMCON com as ferramentas do Poço Web. As demais atividades após a conclusão da revisão estão descritas com mais detalhes no anexo.
+
+%\section{Análises da interação Solo-Revestimento em Método dos Elementos Finitos}
+
+%O apêndice \ref{chap:setup} é direcionado para o estudo da interação direta entre solo e condutor. Tal etapa é de suma importância devido a natureza do procedimento. Após a cravação ou jateamento o solo sofre significativa deformação, alterando sua condição inicial e consequentemente causando um rearranjo na distribuição do poro pressão, capaz de influenciar na capacidade de carga com o tempo. Este efeito denomina-se Setup.
+
+%Para que seja possível a simulação computacional do problema, uma revisão bibliográfica detalhada e uma metodologia para a execução do modelo é apresentada. As simulações, que estão em andamento e serão documentadas nos próximos relatórios, serão realizadas tanto para a cravação quanto para o jateamento.
+
+%\section{Atividades Complementares}
+
+%Para suporte da compreensão dos fenômenos físico-químicos de formação do solo na região de interesse, foi gerado o apêndice \ref{chap:bacias}.
+
+\section{Trabalhos e Publicações}
+
+Dentro das necessidades acadêmicas do grupo, bem como parte da busca por um melhor resultado na entrega dos produtos, publicações dos trabalhos executados servem como formas de contribuição dentro da comunidade acadêmica, além da apresentação de habilidades e \textit{expertise} dos centros de pesquisa envolvidos. Nesse sentido, a Tabela \ref{tab::published_work} traz a lista dos trabalhos aprovados e aguardando aceite até Fevereiro de 2024.
+
+\begin{center}
+    \begin{xltabular}{\textwidth}{|X|X|X|}
+        \hline
+        \textbf{Trabalho}  & \textbf{Congresso} & \textbf{Data Apresentação}  \\ \hline
+        \endfirsthead
+
+        \hline
+        \textbf{Trabalho}  & \textbf{Congresso} & \textbf{Data Apresentação}  \\ \hline
+        \endhead
+
+        Análise da Integridade do Revestimento e Sistema de Cabeça de Poço em Cenário de Worst Case Discharge.  & ENAHPE 2023 & Agosto/2023 \\ \hline
+        Abordagens de Otimização para Início de Poço: Um estudo de caso em Bacia da Costa Leste Brasileira.  & ENAHPE 2023 & Agosto/2023 \\ \hline
+        Análise Confiabilística da Influência da Resistência na Avaliação de Critérios de Projeto Estrutural de Poços de Petróleo. & ENAHPE 2023 & Agosto/2023 \\ \hline
+        Modelagem Numérica e Computacional do Jateamento de Revestimento Condutores: o estado da arte & ENAHPE 2023 & Agosto/2023 \\ \hline
+        Modelagem da cravação do revestimento condutor com o MPM & RIO OIL \& GAS 2024 & Setembro/2024 \\ \hline
+        Thermomechanical modeling of the leak off test (LOT) in oil wells in the presence of evaporites & RIO OIL \& GAS 2024 & Setembro/2024 \\ \hline
+        On The Probabilistic Assessment Of Top-hole Casing Design & Offshore Technology Conference 2024 & Maio/2024 \\ \hline
+        Bayesian-Based Approach in Soil Characterization for Top-hole Design & Offshore Technology Conference 2024 & Maio/2024 \\ \hline
+        Parametric Study of Conductor Casing Installation Using Hydraulic Hammering Method: A Numerical Approach with Material Point Method & XLV CILAMCE & Novembro/2024 \\ \hline
+        Numerical Modelling of Conductor Casing Settlement Using a Two-phase Model & XLV CILAMCE & Novembro/2024 \\ \hline
+        A Numerical Investigation of Conductor Casing Installation Using Material Point Method & XLV CILAMCE & Novembro/2024 \\ \hline
+        Influence of velocity on conductor casing driving via Material Point Method & XLV CILAMCE & Novembro/2024 \\ \hline
+        On the probabilistic assessment of casing applied to top hole design by FORM & XLV CILAMCE & Novembro/2024 \\ \hline
+        Computational Modeling of Torpedo Anchor Penetration at Seabed Using Piezocone Tests & XLV CILAMCE & Novembro/2024 \\ \hline
+        Implementation of a design methodology for well foundation in case of conductor with insufficient axial resistance & XLV CILAMCE & Novembro/2024 \\ \hline
+        Local remesh procedure to model reaming in vertical oil wells drilled through salt rocks & XLV CILAMCE & Novembro/2024 \\ \hline
+        Predictive Characterization of Fracture and Absorption Tests in Halite Formations: an integrated approach of numerical modeling and field data & XLV CILAMCE & Novembro/2024 \\ \hline
+        Modeling of Creep Closure of Salt Rocks Drilled by Directional Wells & XLV CILAMCE & Novembro/2024 \\ \hline
+        Comparative analysis of wellbore closure in salt rock formations considering primary creep & XLV CILAMCE & Novembro/2024 \\ \hline
+        Assessing the Impact of Setup Effect on Top-Hole Design: A Probabilistic Approach (Em processo de submissão) & Offshore Technology Conference 2025 & Maio/2025 \\ \hline
+        Application of Data-Driven Techniques in 3D Soil Characterization for Top-Hole Design (Em processo de submissão) & Offshore Technology Conference 2025 & Maio/2025 \\ \hline
+        Numerical Modeling of Conductor Casing Installation: Leveraging the Material Point Method (Em processo de submissão) & Offshore Technology Conference 2025 & Maio/2025 \\ \hline
+    \end{xltabular}
+    \captionof{table}{Lista de trabalhos aprovados, submetidos e aguardando avaliação e suas respectivas datas de apresentação.}
+    \label{tab::published_work}
+\end{center}
+
+Além das publicações feitas nos mais diversos congressos, também foram realizadas publicações em algumas revistas, as quais podem ser encontradas abaixo:
+
+\begin{itemize}
+	\item VÁRADY FILHO, C. A. F. et al. On the Probabilistic Assessment of Tophole Casing Design. SPE Journal, v. 29, n. 09, p. 4764-4770, 2024.
+    \item VÁRADY, C. et al. Bayesian-Based Approach in Soil Characterization for Tophole Design. SPE Journal, v. 29, n. 11, p. 5792-5803, 2024.
+\end{itemize}

@@ -1,0 +1,354 @@
+\section{Considerações Iniciais }
+
+A perfuração de um poço de petróleo ocorre em diferentes etapas, dentre elas, o início de poço, que ocorre com o assentamento do revestimento condutor. Também chamando de revestimento estrutural, ele é responsável por dar sustentação às paredes do poço e por servir de suporte para os equipamentos de cabeça de poço e os revestimentos das fases seguintes da perfuração. O condutor é instalado no solo e o seu processo de instalação vai depender de variáveis como localização do poço – \textit{onshore} ou \textit{offshore} – e do tipo de solo.  
+
+A cravação é um dos métodos para iniciar o poço em ambiente \textit{offshore}. A depender da profundidade da lâmina d’agua, o ambiente pode ser hostil para a execução de estudos experimentais e, consequentemente, tornar o projeto de poço mais demorado e oneroso. Uma alternativa válida para diminuir os custos de projeto é realizar estudos numéricos a partir de um modelo computacional devidamente validado e calibrado, capaz de representar fielmente a real instalação de um revestimento condutor no solo.  
+
+Este apêndice, portanto, tem como objetivo apresentar os estudos numéricos sobre a operação de instalação do revestimento condutor por cravação. A modelagem foi desenvolvida com base em dados da instalação de condutores no campo Papa Terra, provenientes do relatório de instalação por martelamento e de relatórios de sondagem com CPTu realizados neste campo. 
+
+Apurou-se das aplicações realizadas anteriormente que modelar a cravação do condutor através de métodos numéricos fundamentados na mecânica do contínuo é inviável devido à excessiva distorção de malha, causada pelas grandes deformações inerentes ao processo.  Uma alternativa para superar este desafio, e que vem ganhando força na comunidade geotécnica, é utilizar métodos numéricos baseados em partículas, tais como o Método dos Pontos Materiais (MPM). Este método tem se destacado em cenários com grandes deformações, e é uma escolha promissora para o desenvolvimento da modelagem em questão.
+
+\section{Modelagem numérica}
+
+O estudo numérico foi desenvolvido no ANURA3D, \textit{software} de código aberto e baseado no MPM. Para que um modelo numérico seja devidamente construído, é necessário definir os modelos físicos e matemáticos adequados para representar o comportamento do sistema estudado. A seguir, uma breve descrição das formulações e dos algoritmos utilizados na modelagem numérica do problema proposto, assim como a descrição de sua geometria, restrições e propriedades dos materiais.
+
+\subsection{Método dos Pontos Materiais}
+
+O MPM, originalmente desenvolvido por \citet{sulsky1994particle}, pertence à família de métodos baseados em partículas, os quais têm sido implementados para superar problemas com distorção excessiva de malha dos métodos numéricos tradicionais. Este método deriva do método particle-in-cell (PIC), utilizado na mecânica dos fluidos \citet{ceccato2017numerical}. A Figura abaixo mostra uma básica ilustração do algoritmo do MPM.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{cravacao/MPM}
+	\caption{Algoritmo de resolução do MPM. a) Configuração inicial; b) transferência das informações de propriedades do material para os nós; c) resolução das equações de equilíbrio nos nós da malha computacional (fase lagrangiana); d) informações são transferidas dos nós para os pontos materiais, os quais têm sua posição atualizada e malha retorna ao estado original, descartando os dados (fase convectiva); e) configuração deformada (atualizada). Fonte: Adaptado de \citet{zambrano2020numerical}.}
+	\label{fig:mpm}
+\end{figure}
+
+O MPM possui abordagem euleriana-lagrangiana, na qual o espaço é discretizado em uma malha euleriana, enquanto o corpo contínuo modelado é discretizado em uma quantidade finita de pontos materiais que guardam as propriedades do material analisado. Essas partículas transferem os valores das variáveis de estado do material para os nós da malha, sobre os quais se avaliam as equações de movimento. A atualização dos cálculos nos nós é transferida aos pontos materiais e, ao final de cada passo de tempo, a malha é reestruturada para a posição inicial e as partículas permanecem na posição deslocada, prevenindo distorções excessivas nos elementos (\citet{martinelli2020numerical}, \citet{yost2022}, \citet{fu2024material}).
+
+\subsection{\textit{Two-phase single point formulation:} modelagem para problemas multifásicos}
+
+No MPM, uma formulação dinâmica explícita foi desenvolvida para modelar a interação solo-água. Nela, considera-se que a geração e a dissipação de pressão de poros da água, durante a instalação da estrutura, levando em conta ondas dinâmicas tanto na fase da água quanto na fase sólida (\citet{ceccato2017numerical}; \citet{galavi2019}). As equações de governo são conservação de massa, conservação de momento e um modelo constitutivo capaz de prever a solução do sistema, descritas as equações 1 a 5:
+
+\begin{equation}
+	\rho_L \textbf{a}_L = \nabla \cdot (p_L\textbf{}I)+  \rho_L \textbf{b}-\frac{n\mu_L}{\kappa_L} (\nu_L - \nu_S)
+\end{equation}
+
+\begin{equation}
+	(1-n)\rho_S\textbf{a} + n\rho_L\textbf{a} = \nabla \cdot (\sigma'+p_L\textbf{I})+\rho_m\textbf{b}
+\end{equation}
+
+\begin{equation}
+	\frac{dn}{dt}=(1-n)(\nabla \cdot \nu_S)
+\end{equation}
+
+\begin{equation}
+	\dot{P} = \frac{K_L}{n}[(1-n)\nabla \cdot \nu_S + n\nabla \cdot \nu_L]
+\end{equation}
+
+\begin{equation}
+	\dot{\sigma} = D\dot{\varepsilon}_S - \Omega\sigma' - \sigma'\Omega - \dot{\varepsilon}_{\nu,S} \sigma'
+\end{equation}.
+
+Onde, $n$ é a porosidade; $\rho_S$ e $\rho_L$ são as densidades dos grãos e da fase líquida, respectivamente; $\rho_m = (1-n)\rho_S + n\rho_L$ é a densidade da mistura; \textbf{I} é o tensor identidade; $\nu_S$ e $\rho_L$ são, respectivamente, as velocidades das fases sólidae líquida; $\sigma'$ é o tensor de tensões; $K_L$ é o módulo volumétrico da água pura; $\textbf{b}$ é o vetor de força do corpo; $\textbf{D}$ é a matriz de rigidez; $\cdot{\sigma'}$ e $\dot{\varepsilon}$ são, respectivamente, as taxas de tensão e de deformação da fase sólida; $\Omega$ é o tensor de rotação e $\varepsilon_{\nu,s}$ é o incremento de deformação volumétrica \citep{martinelli2022explicit}. As equações 6 e 7 contêm, respectivamente, a forma discretizada das equações de balanço 1 e 2 para um nó ativo genérico da malha computacional.
+
+\begin{equation}
+	\bar{M}_{L,i}=\bar{f}^{ext}_{L,i} - \bar{f}^{int}_{L,i} + \bar{f}^d_i
+\end{equation}
+
+\begin{equation}
+	\bar{M}_{S,i}a_{S,i} + \bar{M}_La_{L,i} = \bar{f}^{ext}_i - \bar{f}^{int}_i 
+\end{equation}
+
+
+Nas quais, $\bar{M}_{S,i}$, $\bar{M}_{L,i}$, $\bar{f}^{ext}_{L,i}$, $\bar{f}^{int}_{L,i}$, $\bar{f}^d$ são os valores nodais, respectivamente, para: a matriz de massa das fases sólida e líquida; os vetores de força externa, de força interna e de força de arrasto. Estas forças são dependentes do número de elementos ao redor do nó, do número de pontos materiais em cada elemento de malha, da função de forma calculada para a posição de ponto materia e da força gravitacional.
+
+\subsection{Algoritmo de contato}
+Na Engenharia Geotécnica, é comum lidar com problemas que envolvam interação solo-estrutura. Quando um deslizamento por atrito ocorre na superfície de contato entre estes corpos, necessita-se de um algoritmo específico, que permita o movimento relativo entre eles. O algoritmo de contato utilizado foi orginalmente desenvolvido por \citet{bardenhagen2001improved}, que o formulou para modelar tanto a separação entre os corpos quanto o contato com deslizamento por atrito entre eles. Posteriormente, este algoritmo foi extendido a contatos adesivos por \citet{alkafaji2013} \citep{martinelli2021investigation}, como é o caso dos solos coesivos não drenados. A vantagem desse algoritmo é que ele detecta a superfície de contato automaticamente, ou seja, não é necessário definir nenhum elemento especial na interface entre os corpos \citep{alkafaji2013}.
+
+Inicialmente, o efeito do contato é realizado pela correção da diferença de velocidade entre os corpos: seja um sistema com dois corpos A e B em contato de deslizamento, cujas velocidades prescritas individuais (${\nu}_{k,a}$ e ${\nu}_{k,b}$) e a velocidade combinada do sistema $({\nu}_{k,s})$ são resolvidas através das equações de movimento para um nó de contato $k$. Tomando a velocidade prescrita do corpo A num instante de tempo $t$+$\Delta t$:
+
+\begin{equation}
+	{\begin{matrix}
+			(\nu_{k,A}^{t+\Delta t}-\nu_{k,S}^{t+\Delta t}) \cdot n_k^t>0 
+			\\
+			(\nu_{k,A}^{t+\Delta t}-\nu_{k,S}^{t+\Delta t}) \cdot n_k^t<0
+		\end{matrix})}
+\end{equation}
+	
+	\subsection{Algoritmo do corpo rígido}
+	
+	O esquema de integração explícita é condicionalmente estável. O tamanho do passo de tempo para uma solução estável decresce com o aumento da rigidez do material e com a diminuição do tamanho do elemento da malha computacional \citep{martinelli2020numerical}. A fim de reduzir o custo computacional, o condutor é modelado como um corpo rígido através do algoritmo desenvolvido por \citet{zambrano2020numerical}. Esta aproximação desconsidera a propagação de onda na estrutura e torna-se válida porque a rigidez do aço do condutor é muito maior se comparada à rigidez do solo \citep{galavi2019}.
+	
+	\subsection{Malha móvel}
+	
+	Com o intuito de preservar os elementos de malha ao redor da estrutura da deformação imposta, utiliza-se o procedimento de malha móvel. A malha móvel se aproveita do fato da malha computacional não armazenar informações permanentes, já que elas são transmitidas aos pontos materiais Cecatto (2022). Este procedimento consiste basicamente em ajustar a malha adjacente à estrutura ao seu movimento após cada passo de tempo, assegurando que a sua superfície coincida com os elementos de fronteira e, com isso, os elementos manterão a mesma forma durante a simulação \citep{ceccato2017numerical}: a malha móvel será a porção da malha cujos elementos não se deformarão; por outro lado, a porção da malha localizada entre a malha móvel e as restrições do domínio irá se deformar.
+	
+	\subsection{Histórico de desenvolvimento do modelo numérico atual}
+	
+	Para que a geometria do sistema seja devidamente representativo, deve-se construir um modelo numérico característico da situação real do problema proposto, considerando-se as variáveis de projeto, as restrições adotadas e o tamanho ideal do domínio, que seja suficiente para evitar efeitos de borda,  mas que tenha o menor custo computacional possível sem comprometer a qualidade dos resultados da simulação. Ao calibrar um modelo numérico, por muitas vezes, deve-se adaptar a geometria e realizar o remalhamento da malha computacional. Segue um breve histório dos modelos de cravação de condutor prévios, os quais foram importantes para se observar as condições que deveriam ser readequadas até que se chegasse ao modelo atual em desenvolvimento. 
+	
+	Em todos os modelos desenvolvidos, simplificações foram adotadas a fim de se reduzir o custo computacional exigido nas simulações. Dentre elas, adotou-se uma geometria 2D axissimétrica. Isto significa que este sistema possui simetria em relação ao seu eixo vertical em um espaço bidimensional. Outra simplificação relevante foi introduzir uma ponta triangular, na base do condutor, com a finalidade de se reduzir instabilidades numéricas nesta região. No entanto, na região apelidada de "\textit{shoulder}", o encontro entre a ponta e a base do condutor, estava ocorrendo um fenômeno numérico indesejado chamado de "interpenetração", nela duas ou mais partículas materiais ocupam o mesmo espaço simultaneamente, ou seja, suas fronteiras se sobrepõem. 
+	
+	A interpenetração se dá, por exemplo, devido a uma deformação extrema nos corpos, é o que se observa no problema proposto, dado que há uma estrutura rígida penetrando um corpo altamente deformável. Ou, então, devido a erros numéricos, como a discretização inadequada das equações de movimento. No caso em questão, provavelmente ocorreu porque no vértice do \textit{shoulder}, estavam constando dois vetores normais, que "confundiam" o movimento das partículas, resultando na interpenetração, conforme mostra a Figura \ref{fig:interpenetracao}. 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{cravacao/interpenetracao.pdf}
+		\caption{Interpenetração dos pontos materiais do solo no condutor, para onde as setas vermelhas apontam. O \textit{shoulder} é destacado pelas setas amarelas. Os pontos materiais azuis são a discretização do solo; os vermelhos, a discretização do revestimento condutor. Fonte: Autores (2025)}
+		\label{fig:interpenetracao}
+	\end{figure}
+	
+	
+	A Figura \ref{fig:historico1} mostra alguns dos modelos principais desenvolvidos ou adaptados ao estudo de caso. Uma série de adequações foram realizadas para aumentar a estabilidade do modelo, como o refinamento da malha computacional, redução ou expansão da geometria, alteração na especificação dos pontos materiais, ajustes no passo de tempo, entre outros. No entanto, nestes modelos, ainda era recorrente interpenetração no vértice do \textit{shoulder}, causando instabilidades numéricas, como o descolamento do solo da parede do condutor. Ou, então, uma adesão excessiva do solo à essa parede, que resultava na sua "explosão" em regiões próximas ao revestimento. Eventos que impediam, inclusive, o avanço do condutor em profundidades maiores, que só alcançava alguns centímetros de deslocamento vertical, ainda na fase de peso próprio da cravação. Isto pode ser ilustrado na Figura \ref{fig:historico1}. Nestes modelos, a simulação já iniciava com o condutor pre-cravado no solo, no entanto, o avanço era de 50 cm a 1,3m e, em seguida, a simulação abortava.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\linewidth]{cravacao/historico1.pdf}
+		\caption{Modelos desenvolvidos na fase inicial do projeto}
+		\label{fig:historico1}
+	\end{figure}
+	
+	Uma solução encontrada foi voltar a simplificar a geometria e reanalisar todos os aspectos numéricos separadamente, assim como a sua reestruturação. Um dos pontos revisados foi o remalhamento e a alteração no contato solo-estrutura. O problema do contato foi resolvido suavizando-se o vértice do \textit{shoulder}, deixando-o mais arredondado, o que solucionou a sobreposição das normais, evitando a interpenetração. Nos modelos anteriores, a divergência da solução ocorria logo no início da simulação. Com a suavização do \textit{shoulder}, o condutor vem alcançando profundidades cada vez maiores. Vários testes foram realizados para se chegar à configuração atual. A Figura \ref{fig:interpenetracao2} mostra uma breve descrição desse processo. Salienta-se que ao, realizar a suavização do \textit{shoulder}, é necessário se atentar ao refinamento da malha nesta região. Um refinamento muito excessivo pode elevar bastante o custo computacional da simulação. 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\linewidth]{cravacao/interpenetracao2.pdf}
+		\caption{a) breve descrição da transição realizada na ponta do condutor; b) geometria da ponta de adotada em alguns dos modelos anteriores, simulação abortada 11 \textit{steps} após o início da cravação; c) geometria da ponta adotada atualmente.}
+		\label{fig:interpenetracao2}
+	\end{figure}
+	
+	A partir da geometria da Figura \ref{fig:historico2}a, observou-se que o solo apresentou um comportamento mais fisicamente consistente e que a simulação não mais abortava. Em seguida, uma maior complexidade foi adicionada ao se aumentar a geometria e alterar a malha computacional, como pode ser observado em Figura \ref{fig:historico2}b, aumentando o seu refinamento na região de interesse (próxima à ponta) e, consequentemente, condensando mais pontos materiais nela. Isso ajuda a obter uma melhor precisão dos resultados. Nas regiões mais distantes da região de interesse, o refinamento foi reduzido, consequentemente, otimizando o custo computacional.  Outra adaptação importante foi considerar o condutor com a ponta fechada. A ponta fechada ocorre devido ao fenômeno de "embuchamento", no qual um plug de solo argiloso se forma logo no início da cravação, ocupando a secção transversal do condutor devido à adesão da argila em suas paredes internas. Com isto, foi possível considerar o condutor como sendo uma estrutura maciça, com raio de 18" (0,4572 m). Essa medida foi necessária para melhorar a transição de malha computacional do revestimento para o ambiente externo, elevando a qualidade dos elementos de malha, como pode ser visto na Figura \ref{fig:historico2}b.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\linewidth]{cravacao/historico2.pdf}
+		\caption{a) Modelo intermediário que foi o ponto de partida para b) o modelo computacional atual em desenvolvimento}
+		\label{fig:historico2}
+	\end{figure}
+	
+	
+	
+	\section{Simulação da cravação do revestimento condutor por martelamento}
+	
+	Com base nos conhecimentos adquiridos a partir das simulações anteriores, foi possível avançar para uma abordagem mais refinada, resultando no desenvolvimento de um novo modelo para a simulação da cravação do revestimento condutor por martelamento.
+	
+	\subsection{Metodologia}
+	
+	Assim, a geometria foi implementada utilizando um modelo 2D axisimétrico. O domínio foi discretizado em uma malha não estruturada composta por 4.884 elementos triangulares de três nós, 2.539 nós e 13.805 pontos materiais, distribuídos de forma que a região do solo contém seis pontos materiais por elemento, enquanto a região do condutor possui um por elemento. 
+	
+	A geometria completa possui 124,68 metros de altura e 29,26 metros de raio. O domínio do solo argiloso é segmentado em quatro camadas distintas: a primeira se estende até 8 metros de profundidade, a segunda até 10 metros, e a terceira e quarta atingem 17 e 25 metros, respectivamente. Para reduzir o custo computacional nas análises iniciais, o solo foi limitado a uma profundidade de 60 metros. O condutor, por sua vez, possui um diâmetro externo de 36 polegadas (~0,91 metros) e um comprimento total de 58,8 metros. A adesão da argila na seção transversal forma um tampão que veda o diâmetro interno do revestimento, permitindo que ele seja tratado como uma estrutura maciça com um peso linear de 3.470 lb/ft. Essa consideração reduziu a necessidade de refinamento excessivo na região próxima ao condutor, facilitando o processo de discretização da malha.
+	
+	Conforme ilustrado na Figura \ref{fig:Dominio_cracavao}, o revestimento condutor encontra-se inicialmente posicionado acima da mudline. Para melhorar a estabilidade numérica, foi implementada uma ponta no condutor, conforme abordado em estudos anteriores (\citet{ceccato2017adhesive}; \citet{galavi2017numerical}; \citet{galavi2018numerical}; \citet{martinelli2021investigation}; \citet{martinelli2022explicit}; \cite{yost2023addressing}; \citet{ceccato2024simulating}).
+	
+	As condições de contorno foram definidas da seguinte forma: o movimento horizontal é restrito nas laterais, o deslocamento vertical é limitado no topo, e a fronteira inferior é fixa para impedir qualquer deslocamento. O condutor pode se mover exclusivamente na direção vertical. Além disso, o procedimento de malha móvel está ilustrado na Figura \ref{fig:Dominio_cracavao}, onde a malha comprimida é restrita à região do solo, enquanto a malha móvel ocupa a parte superior, tendo o condutor como referência para seu deslocamento. O revestimento foi modelado como um corpo rígido, e a interação solo-estrutura foi representada por meio do algoritmo de contato adesivo proposto por \citet{alkafaji2013}.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{cravacao/Dominio_cravacao.pdf}
+		\caption{Geometria em camadas, distribuição da malha e geometria do condutor de um modelo numérico 2D axissimétrico. Fonte: Autores (2024)}
+		\label{fig:Dominio_cracavao}
+	\end{figure}
+	
+	\subsubsection{Propriedades dos materiais}
+	
+	Tem-se que, aspectos como porosidade, coeficiente de Poisson, coeficiente de empuxo lateral e interação de contato são parâmetros essenciais para modelar o problema em questão, determinando o comportamento e a resposta dos materiais envolvidos na análise. Um exemplo disso é que a porosidade é influenciada pelo tipo de solo e tem um efeito significativo no fluxo de fluido dentro do meio, ao passo que o coeficiente de Poisson avalia a relação entre a deformação radial e axial de um material quando sujeito a carregamento unidimensional \citep{federico2009rest}. 
+	
+	A consideração do empuxo de terra é fundamental em sistemas com estruturas envoltas por solo. O empuxo de terra é uma ação produzida pelo maciço terroso sobre as obras com ele em contato \citep{maragon2008}, logo, essa ação vai influenciar nas tensões agindo sobre o solo no momento inicial da cravação. No Anura3D, é possível iniciar as tensões no solo através do procedimento K0, pré-definido no solver. O parâmetro K0 baseia-se na relação entre a tensão vertical e a tensão horizontal, que é função da elasticidade do material, mas também pode ser definido em função do coeficiente de Poisson, conforme apresentado na Equação \ref{eq:eq_prop}
+	
+	\begin{equation}
+		\kappa _{0}=\frac{\nu }{1-\nu }
+		\label{eq:eq_prop}
+	\end{equation}
+	
+	De acordo com os dados de resistência à compressão foi possível classificar o solo como uma argila muito mole, considerando-se o critério adotado por Marangon (2018). Os dados de ensaio CPTu utilizados são disponibilizados pela operadora, a partir dos quais constatou-se que o modelo constitutivo de Mohr-Coulomb seria adequado para modelar a resposta do solo. Além disso, é válido destacar que, embora o solo seja um material heterogêneo, para o presente trabalho foi utilizada uma única camada, a fim de simplificar o modelo em análise. A equação do critério de Mohr-Coulomb estabelece uma relação entre a tensão de cisalhamento ($\tau$), a coesão ($c$), a tensão normal ($\sigma_{n}$) e a tangente do ângulo de atrito interno (tan($\phi$)) \citep{dasbraja}.
+	
+	\begin{equation}
+		\tau =c+\sigma _{n}\cdot tan(\phi )
+		\label{eq:eq_prop2}
+	\end{equation}
+	
+	No modelo, o revestimento condutor possui propriedades do aço é considerado como um corpo rígido, com densidade de 7860 kg/m³. A Tabela \ref{tab:propriedades_crav} contém as propriedades dos materiais considerados para modelar o solo coesivo não drenado em questão.  
+	
+	\begin{table}[H]
+		\centering
+		\footnotesize % Reduz tamanho da fonte
+		\renewcommand{\arraystretch}{1.2} % Aumenta espaçamento entre linhas
+		\setlength{\tabcolsep}{4pt} % Ajusta espaçamento entre colunas
+		\begin{tabular}{|cccccc|}
+			\hline
+			\multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{Propriedades}}} &
+			\multicolumn{4}{c|}{\textbf{Valor}} &
+			\multirow{2}{*}{\textbf{Unidade}} \\ \cline{2-5}
+			\multicolumn{1}{|c|}{} &
+			\multicolumn{1}{c|}{Camda 1} &
+			\multicolumn{1}{c|}{Camada 2} &
+			\multicolumn{1}{c|}{Camada 3} &
+			\multicolumn{1}{c|}{Camada 4} &
+			\\ \hline
+			\multicolumn{1}{|c|}{\textbf{Classificação}} &
+			\multicolumn{1}{c|}{Argila muito mole} &
+			\multicolumn{1}{l|}{Argila muito mole} &
+			\multicolumn{1}{l|}{Argila mole} &
+			\multicolumn{1}{l|}{Argila média} &
+			\multicolumn{1}{l|}{} \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Porosidade inicial}} &
+			\multicolumn{1}{c|}{0.58} &
+			\multicolumn{1}{c|}{0.58} &
+			\multicolumn{1}{c|}{0.47} &
+			\multicolumn{1}{c|}{0.43} &
+			- \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Densidade}} &
+			\multicolumn{1}{c|}{1,475.40} &
+			\multicolumn{1}{c|}{1,687.91} &
+			\multicolumn{1}{c|}{1,799.32} &
+			\multicolumn{1}{c|}{1,838.82} &
+			Kg/m³ \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Coeficiente de Poisson \linebreak efetivo}} &
+			\multicolumn{1}{c|}{0.49} &
+			\multicolumn{1}{c|}{0.49} &
+			\multicolumn{1}{c|}{0.45} &
+			\multicolumn{1}{c|}{0.40} &
+			- \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Valor de K0}} &
+			\multicolumn{1}{c|}{0.96} &
+			\multicolumn{1}{c|}{0.96} &
+			\multicolumn{1}{c|}{0.82} &
+			\multicolumn{1}{c|}{0.67} &
+			- \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Módulo de elasticidade efetivo}} &
+			\multicolumn{1}{c|}{17,896.07} &
+			\multicolumn{1}{c|}{27,823.35} &
+			\multicolumn{1}{c|}{60,440.32} &
+			\multicolumn{1}{c|}{83,865.38} &
+			kPa \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Coesão efetiva}} &
+			\multicolumn{1}{c|}{9,27} &
+			\multicolumn{1}{c|}{36.23} &
+			\multicolumn{1}{c|}{93.95} &
+			\multicolumn{1}{c|}{148.92} &
+			kPa \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Ângulo de atrito efetivo}} &
+			\multicolumn{1}{c|}{36.29} &
+			\multicolumn{1}{c|}{37.99} &
+			\multicolumn{1}{c|}{40.35} &
+			\multicolumn{1}{c|}{37.63} &
+			graus \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Ângulo de atrito (contato)}} &
+			\multicolumn{1}{c|}{0.43} &
+			\multicolumn{1}{c|}{0.44} &
+			\multicolumn{1}{c|}{0.47} &
+			\multicolumn{1}{c|}{0.44} &
+			rad \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Fator de adesão}} &
+			\multicolumn{1}{c|}{4.64} &
+			\multicolumn{1}{c|}{18.12} &
+			\multicolumn{1}{c|}{46.97} &
+			\multicolumn{1}{c|}{74.46} &
+			kPa \\ \hline
+			\multicolumn{6}{|c|}{\textbf{Água}} \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Densidade}} &
+			\multicolumn{4}{c|}{1000} &
+			Kg/m³ \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Permeabilidade intrínseca}} &
+			\multicolumn{4}{c|}{1.0214x10-9} &
+			m³/s \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Módulo volumétrico}} &
+			\multicolumn{4}{c|}{2.15x104} &
+			kPa \\ \hline
+			\multicolumn{1}{|c|}{\textbf{Viscosidade dinâmica}} &
+			\multicolumn{4}{c|}{1.5673x10-6} &
+			kPa   s \\ \hline
+		\end{tabular}
+		\caption{Propriedades utilizadas para modelar o solo coesivo não drenado}
+		\label{tab:propriedades_crav}
+	\end{table}
+	
+	Para representar com precisão a variação do comportamento do solo em função da profundidade, a Figura \ref{fig:cracavao_solo} apresenta a evolução da resistência à compressão ao longo do perfil do solo. Essa representação evidencia as transições entre as camadas, demonstrando um aumento progressivo da resistência à medida que a profundidade se aprofunda.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{cravacao/cravacao_solo.pdf}
+		\caption{Variação da resistência à compressão ao longo da profundidade. Fonte: Autores (2024)}
+		\label{fig:cracavao_solo}
+	\end{figure}
+	
+	
+	\subsubsection{Automatização da etapa de martelamento}
+	
+	Para simular a etapa de martelamento, conforme mencionado anteriormente, algumas simplificações estão sendo adotadas e aprimoradas à medida que o modelo evolui. No modelo atual, a modelagem do martelamento é realizada por meio da aplicação de uma velocidade inicial, que deve ser definida manualmente nas configurações do CPS do modelo.
+	
+	Como mostrado na Figura \ref{fig:automatic_fig2}, a definição da velocidade inicial ocorre durante o desenvolvimento do modelo. Para garantir que essa velocidade seja aplicada sempre que necessário, representando os impactos dessa etapa, é necessário ajustar o CPS, ativando a velocidade conforme a demanda. O intervalo entre os impactos foi definido em 1 segundo, ou seja, a cada segundo, a velocidade inicial é ativada novamente para gerar um novo impacto.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{cravacao/Automatic_fig2.pdf}
+		\caption{Implementação dos impactos na etapa do martelamento. Fonte: Autores (2025)}
+		\label{fig:automatic_fig2}
+	\end{figure}
+	
+	Inicialmente, a modificação no CPS do modelo a cada 1 segundo era feita manualmente, exigindo que o desenvolvedor realizasse a alteração e retomasse a execução do modelo. Esse processo começou a se tornar demorado e pouco eficiente, tornando necessária uma solução automatizada. Para otimizar o tempo dos desenvolvedores e acelerar a obtenção de resultados sobre o progresso dos modelos nesta etapa, foi desenvolvido um programa utilizando a linguagem Python para automatizar esse procedimento. A Figura abaixo apresenta um fluxograma básico ilustrando o funcionamento do programa, permitindo a automação desse processo.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{cravacao/Automatic_fig1.pdf}
+		\caption{Fluxograma da automatização da implementação dos impactos na etapa do martelamento. Fonte: Autores (2025)}
+		\label{fig:automatic_fig1}
+	\end{figure}
+	
+	Quando o código é executado, alguns dados de entrada são fornecidos, como o nome da pasta, a quantidade de impactos e o intervalo entre eles, conforme definido pelo desenvolvedor. A Figura abaixo ilustra essas etapas.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{cravacao/Automatic_fig3.pdf}
+		\caption{Janelas de informações de entrada do código. Fonte: Autores (2025)}
+		\label{fig:automatic_fig1}
+	\end{figure}
+	
+	Isso permitiu tornar o processo de aplicação dos impactos significativamente mais rápido, aumentando a eficiência do trabalho. Como resultado, os dados e análises podem ser obtidos em um tempo muito menor em comparação ao método manual utilizado anteriormente.
+	
+	\subsection{Resultados atuais}
+	
+	Os resultados do modelo numérico desenvolvido mostram uma forte concordância com os dados operacionais reais, validando a aplicação do Método do Ponto Material (MPM) na simulação da instalação de revestimentos de condutores em solos argilosos offshore. A precisão na previsão dos deslocamentos e das distribuições de tensão ao redor do condutor confirma a adequação das formulações empregadas para representar as complexas interações solo-estrutura em ambientes offshore desafiadores.
+	
+	A análise das distribuições de tensão ao longo das fases de peso próprio e martelamento indicou um aumento significativo da resistência do solo com a profundidade, o que contribui para a estabilização da taxa de penetração do revestimento. Esse comportamento está em conformidade com estudos prévios (\citet{galavi2024mpm}; \citet{martinelli2021investigation}), que também relataram um incremento progressivo da resistência do solo durante a instalação de estruturas similares.
+	
+	A simulação forneceu insights valiosos sobre o comportamento do solo durante a instalação do revestimento do condutor. A estabilização progressiva da descida durante a fase de peso próprio indica que o modelo representa com precisão a interação dinâmica entre o condutor e o solo circundante. Além disso, a resposta do solo ao início dos impactos de martelamento e o consequente aumento da resistência evidenciam a capacidade do modelo de capturar adequadamente as condições de carga dinâmica. Para uma melhor compreensão dos efeitos desse processo, a Figura \ref{fig:cravacao_result1} apresenta a distribuição de tensão no solo em dois momentos distintos: (a) após a fase de peso próprio e (b) após a fase de martelamento.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{cravacao/cravacao_result1.pdf}
+		\caption{a) Distribuição da tensão vertical efetiva no final da fase de penetração do peso próprio; b) Distribuição da tensão vertical efetiva no final da fase de penetração do martelo. Fonte: Autores (2025)}
+		\label{fig:cravacao_result1}
+	\end{figure}
+	
+	A Figura \ref{fig:cravacao_result1} apresenta a distribuição das tensões verticais efetivas no solo. Uma análise mais detalhada das tensões próximas ao revestimento do condutor revela um aumento significativo na concentração de tensões na região da ponta. Esse comportamento é observado tanto na fase de peso próprio (Fig. \ref{fig:cravacao_result1}a) quanto após a aplicação das cargas de impacto (Fig. \ref{fig:cravacao_result1}b).
+	
+	Além disso, o perfil de descida do condutor ao longo do tempo pode ser analisado na Figura \ref{fig:cravacao_result2}. No início da operação, durante a fase de peso próprio, a velocidade de descida do condutor reduz gradualmente até se estabilizar por volta dos 5 segundos. A partir desse ponto, iniciam-se os impactos de martelamento.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{cravacao/cravacao_result2.pdf}
+		\caption{Profundidade alcançada após a fase de martelamento. Atualmente, o condutor está em uma profundidade de aproximadamente 13,50 metros. Fonte: Autores (2025)}
+		\label{fig:cravacao_result2}
+	\end{figure}
+	
+	Durante a fase de peso próprio, o revestimento do condutor atinge aproximadamente 9,5 metros de profundidade após 5 segundos, penetrando a primeira camada de solo e adentrando a segunda, que apresenta maior resistência. Normalmente, essa fase resulta em profundidades entre 10 e 15 metros, indicando que o valor observado está próximo do esperado.
+	
+	Em seguida, a aplicação dos impactos provoca uma descida gradual do condutor. Com base na metodologia de \citet{galavi2019}, adotou-se um intervalo de 1 segundo entre impactos. Após um total de 64 impactos, o condutor alcançou cerca de 13,5 metros de profundidade. O estágio de martelamento é um processo complexo, pois a crescente resistência do solo exige um número progressivamente maior de impactos para cada avanço adicional. Para garantir a precisão do modelo na previsão da interação solo-estrutura, foi realizada uma calibração com dados operacionais da indústria, conforme ilustrado na Figura \ref{fig:cravacao_result3}.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{cravacao/cravacao_result3.pdf}
+		\caption{Número acumulado de impactos ao longo da profundidade alcançada somente durante a fase de penetração do martelo. Fonte: Autores (2025)}
+		\label{fig:cravacao_result3}
+	\end{figure}
+	
+	A Figura \ref{fig:cravacao_result3} compara os dados operacionais da indústria (curva azul) com os resultados simulados (curva vermelha), evidenciando um comportamento semelhante entre ambos. Ajustes futuros no modelo e refinamentos nas simplificações aplicadas podem melhorar ainda mais essa correspondência.
+	
+	Assim, apesar dos avanços, algumas limitações devem ser consideradas. O modelo 2D axisimétrico, embora reduza custos computacionais, pode não representar completamente os efeitos tridimensionais das interações solo-estrutura, especialmente em solos anisotrópicos ou com variações laterais. A ampliação para um modelo 3D pode fornecer uma análise mais detalhada do processo de instalação.
+	
+	Além disso, a caracterização do solo baseada em dados CPTu pode apresentar variações conforme o local de instalação, impactando a precisão do modelo. Dessa forma, sua aplicação em diferentes contextos geotécnicos depende diretamente da qualidade e representatividade dos dados de entrada.
+	
+	\subsection{Considerações finais}
+	
+	O estudo da cravação do revestimento condutor tem avançado significativamente nas etapas mais recentes, demonstrando que o modelo numérico desenvolvido está alinhado com o problema proposto, desempenhando um papel fundamental na previsão do comportamento do condutor durante a instalação. Nesse contexto, a análise evidenciou a influência das propriedades do solo e das condições de cravação na profundidade final atingida, permitindo ajustes mais precisos nos parâmetros operacionais. No entanto, a modelagem adotada foi limitada a um formato axissimétrico, o que pode restringir a representação completa dos efeitos tridimensionais da interação solo-estrutura, além de outras simplificações relacionadas à etapa de martealmento. Diante disso, estudos futuros devem explorar a ampliação do modelo, visando maior precisão nas simulações e uma compreensão mais detalhada dos fatores que influenciam o processo de cravação.
