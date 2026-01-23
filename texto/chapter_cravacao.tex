@@ -1,6 +1,5 @@
 \section{Considerações Iniciais }
 
-% reescrito
 A etapa inicial da perfuração de um poço de petróleo ocorre com a instalação do revestimento condutor, ou estrutural, no solo. Conforme sugere, a função deste tubo é estabilizar as paredes do poço e fornecer suporte aos equipamentos de cabeça e aos revestimentos das fases subsequentes. A sua instalação o varia com a localização do poço (\textit{onshore} ou \textit{offshore}) e as características geotécnicas do solo.  
 
 No cenário \textit{offshore}, a cravação é uma alternativa recorrente para o início de poço. O processo que levará à execução dessa atividade consiste de certas etapas, dentre elas, o ajuste de parâmetros de projeto, muitas vezes, realizado com base em ensaios experimentais. No entanto, em lâminas d’água elevadas, a execução desses ensaios tende a ser arriscada e dispendiosa, estendendo cronogramas. Para mitigar custos e riscos, estudos numéricos apoiados em modelos validados e calibrados oferecem uma representação confiável da instalação do condutor no solo.
@@ -12,24 +11,40 @@ Como é sabido, problemas de impacto deste tipo envolvem grandes deformações e
 
 \section{Modelagem numérica}
 
-O estudo numérico foi desenvolvido no ANURA3D, \textit{software} de código aberto e baseado no MPM. Para que um modelo numérico seja devidamente construído, é necessário definir os modelos físicos e matemáticos adequados para representar o comportamento do sistema estudado. A seguir, uma breve descrição das formulações e dos algoritmos utilizados na modelagem numérica do problema proposto, assim como a descrição de sua geometria, restrições e propriedades dos materiais.
+Para atender ao desafio proposto, a análise numérica foi realizada no \textit{software} \textit{open source} ANURA3D, que utiliza o Método dos Pontos Materiais para processar os cálculos. Na sequência, apresentam-se, de forma sucinta, as formulações e os algoritmos adotados, bem como a descrição da geometria, das condições de contorno e das propriedades dos materiais.
 
 \subsection{Método dos Pontos Materiais}
 
-O MPM, originalmente desenvolvido por \citet{sulsky1994particle}, pertence à família de métodos baseados em partículas, os quais têm sido implementados para superar problemas com distorção excessiva de malha dos métodos numéricos tradicionais. Este método deriva do método particle-in-cell (PIC), utilizado na mecânica dos fluidos \citet{ceccato2017numerical}. A Figura abaixo mostra uma básica ilustração do algoritmo do MPM.
+O Método dos Pontos Materiais (MPM) é uma abordagem híbrida Euleriana-Lagrangiana que combina as vantagens de métodos numéricos baseados em partículas e baseados em malha. Nesse arcabouço, o domínio computacional é discretizado por uma malha Euleriana de fundo fixa. Ao mesmo tempo, os corpos materiais são representados por partículas Lagrangianas (pontos materiais) que transportam todas as propriedades físicas e constitutivas (massa, densidade, tensões, deformações, etc.) e se deslocam através da malha. Essa dupla caracterização permite ao MPM lidar naturalmente com grandes deformações, evitando os problemas de distorção de malha inerentes aos métodos puramente Eulerianos (\citet{yerro2022modelling}; \citet{nguyen2023material}). A Figura \ref{fig:MPM} mostra um breve esquema do ciclo de simulação numérica utilizando o MPM.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{cravacao/MPM}
-	\caption{Algoritmo de resolução do MPM. a) Configuração inicial; b) transferência das informações de propriedades do material para os nós; c) resolução das equações de equilíbrio nos nós da malha computacional (fase lagrangiana); d) informações são transferidas dos nós para os pontos materiais, os quais têm sua posição atualizada e malha retorna ao estado original, descartando os dados (fase convectiva); e) configuração deformada (atualizada). Fonte: Adaptado de \citet{zambrano2020numerical}.}
-	\label{fig:mpm}
+  	\includegraphics[width=1\linewidth]{cravacao/MPM2.pdf}
+	\caption{Algoritmo de resolução do MPM. Fonte: Autores (2026)}
+	\label{fig:MPM}
 \end{figure}
 
-O MPM possui abordagem euleriana-lagrangiana, na qual o espaço é discretizado em uma malha euleriana, enquanto o corpo contínuo modelado é discretizado em uma quantidade finita de pontos materiais que guardam as propriedades do material analisado. Essas partículas transferem os valores das variáveis de estado do material para os nós da malha, sobre os quais se avaliam as equações de movimento. A atualização dos cálculos nos nós é transferida aos pontos materiais e, ao final de cada passo de tempo, a malha é reestruturada para a posição inicial e as partículas permanecem na posição deslocada, prevenindo distorções excessivas nos elementos (\citet{martinelli2020numerical}, \citet{yost2022}, \citet{fu2024material}).
+O método impõe a conservação da quantidade de movimento, conforme expresso na Eq.\eqref{eq:quantidade_movimento}. A integração numérica prossegue pelas etapas: cálculo das funções de forma para todos os pontos materiais ao longo da malha de fundo e transferência das propriedades de massa e quantidade de movimento das partículas para os nós (\ref{fig:MPM}a); solução das equações de quantidade de movimento na malha (Eqs.\eqref{eq:forca_interna} e \eqref{eq:forca_externa}) (\ref{fig:MPM}b); e projeção das velocidades e posições nodais atualizadas de volta aos pontos materiais (\ref{fig:MPM}c). Onde $\sigma_p$ é a tensão de Cauchy; $\nabla N_I(\mathbf{x}_p)$ é o gradiente da função de forma; $V_p$ e $\rho_p$ são, respectivamente, o volume e a densidade do ponto material; $\mathbf{b}$ é a força de corpo; e $\mathbf{f}_I^{int}$, $\mathbf{f}_I^{ext}$ são as forças nodais internas/externas. Ao final de cada passo de tempo, a malha é reestruturada para a posição inicial e as partículas permanecem na posição deslocada, prevenindo distorções excessivas nos elementos (\citet{martinelli2020numerical}, \citet{yost2022}, \citet{fu2024material}).
 
-\subsection{\textit{Two-phase single point formulation:} modelagem para problemas multifásicos}
+\begin{equation}
+	\rho \frac{dv}{dt} = \nabla \cdot \sigma + \rho \mathbf{b}
+	\label{eq:quantidade_movimento}
+\end{equation}
 
-No MPM, uma formulação dinâmica explícita foi desenvolvida para modelar a interação solo-água. Nela, considera-se que a geração e a dissipação de pressão de poros da água, durante a instalação da estrutura, levando em conta ondas dinâmicas tanto na fase da água quanto na fase sólida (\citet{ceccato2017numerical}; \citet{galavi2019}). As equações de governo são conservação de massa, conservação de momento e um modelo constitutivo capaz de prever a solução do sistema, descritas as equações 1 a 5:
+\begin{equation}
+	f_I^{\text{int}} = - \sum_p \sigma_p \,\nabla N_I(\mathbf{x}_p)\, V_p
+	\label{eq:forca_interna}
+\end{equation}
+
+\begin{equation}
+	f_I^{\text{ext}} = \sum_p N_I(\mathbf{x}_p)\,\rho_p\,\mathbf{b}\, V_p
+	\label{eq:forca_externa}
+\end{equation}
+
+\subsection{\textit{Two-phase single point formulation:} modelagem para problemas de interação solo-água}
+
+A formulação \textit{Two-phase single point}, em modo explícito no MPM, é capaz de descrever como ocorre a interação solo-água, levando-se em consideração a geração e a dissipação de pressão de poros mediante a descida da estrutura no solo, assim como a propagação das ondas dinâmicas em ambas as fases \citet{alkafaji2013}. Nesta formulação todas as fases (por exemplo, esqueleto sólido, água e, eventualmente, ar) são representadas por um conjunto único de pontos materias. Os pontos materiais se movem juntamente com o movimento sólido (descrição lagrangiana), enquanto os fluidos são descritos usando um referencial euleriano. Essa representação dos meios multifásicos é conveniente para muitas aplicações geotécnicas, mas não considera a separação física entre água livre e esqueleto sólido, como é no caso da aplicação no presente modelo \citet{ceccato2024simulating}. As equações de governo são conservação de massa, conservação de momento e um modelo constitutivo capaz de prever a solução do sistema, descritas as equações 1 a 5, conforme descrito por \cite{martinelli2022explicit}:
+
 
 \begin{equation}
 	\rho_L \textbf{a}_L = \nabla \cdot (p_L\textbf{}I)+  \rho_L \textbf{b}-\frac{n\mu_L}{\kappa_L} (\nu_L - \nu_S)
@@ -62,7 +77,7 @@ Onde, $n$ é a porosidade; $\rho_S$ e $\rho_L$ são as densidades dos grãos e d
 \end{equation}
 
 
-Nas quais, $\bar{M}_{S,i}$, $\bar{M}_{L,i}$, $\bar{f}^{ext}_{L,i}$, $\bar{f}^{int}_{L,i}$, $\bar{f}^d$ são os valores nodais, respectivamente, para: a matriz de massa das fases sólida e líquida; os vetores de força externa, de força interna e de força de arrasto. Estas forças são dependentes do número de elementos ao redor do nó, do número de pontos materiais em cada elemento de malha, da função de forma calculada para a posição de ponto materia e da força gravitacional.
+Nas quais, $\bar{M}_{S,i}$, $\bar{M}_{L,i}$, $\bar{f}^{ext}_{L,i}$, $\bar{f}^{int}_{L,i}$, $\bar{f}^d$ são os valores nodais, respectivamente, para: a matriz de massa das fases sólida e líquida; os vetores de força externa, de força interna e de força de arrasto. Estas forças são dependentes do número de elementos ao redor do nó, do número de pontos materiais em cada elemento de malha, da função de forma calculada para a posição de ponto material e da força gravitacional.
 
 \subsection{Algoritmo de contato}
 Na Engenharia Geotécnica, é comum lidar com problemas que envolvam interação solo-estrutura. Quando um deslizamento por atrito ocorre na superfície de contato entre estes corpos, necessita-se de um algoritmo específico, que permita o movimento relativo entre eles. O algoritmo de contato utilizado foi orginalmente desenvolvido por \citet{bardenhagen2001improved}, que o formulou para modelar tanto a separação entre os corpos quanto o contato com deslizamento por atrito entre eles. Posteriormente, este algoritmo foi extendido a contatos adesivos por \citet{alkafaji2013} \citep{martinelli2021investigation}, como é o caso dos solos coesivos não drenados. A vantagem desse algoritmo é que ele detecta a superfície de contato automaticamente, ou seja, não é necessário definir nenhum elemento especial na interface entre os corpos \citep{alkafaji2013}.
