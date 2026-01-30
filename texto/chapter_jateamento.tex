@@ -1,24 +1,32 @@
 \section{Considerações Iniciais}
 
-A necessidade de explorar áreas cada vez mais profundas levou ao aprimoramento das técnicas de perfuração de poços. Entre os principais métodos utilizados para iniciar poços offshore, destacam-se o jateamento e a cravação. O jateamento, em particular, é altamente eficiente na instalação do revestimento condutor em sedimentos de águas profundas, que geralmente apresentam baixa consolidação e diagênese reduzida. Esse método minimiza falhas ao preservar a integridade das formações geológicas superficiais, frequentemente frágeis. Por essa razão, o jateamento é amplamente adotado como a técnica predominante na perfuração offshore (\citet{kan2018field}; \citet{akers2008jetting}).
+A necessidade de explorar áreas cada vez mais profundas levou ao aprimoramento das técnicas de perfuração de poços. Entre os principais métodos utilizados para iniciar poços offshore, destacam-se o jateamento e a cravação. O jateamento, em particular, é altamente eficiente na instalação do revestimento condutor em sedimentos de águas profundas, que geralmente apresentam baixa consolidação e diagênese reduzida. Esse método minimiza falhas ao preservar a integridade das formações geológicas superficiais, frequentemente frágeis. Por essa razão, o jateamento é amplamente adotado como a técnica predominante na perfuração offshore (\cite{kan2018field}; \cite{akers2008jetting}).
 
-Para o desenvolvimento deste modelo, foram adotadas diversas metodologias com o objetivo de otimizar os resultados da instalação do revestimento condutor por meio do método de jateamento. Nesse contexto, foram desenvolvidos modelos para compreender o comportamento do solo em condições específicas, utilizando o modelo viscoplástico de Herschel-Bulkley para caracterizar o comportamento reológico do solo marinho argiloso quando submetido às forças de cisalhamento exercidas pelo jato de fluido de perfuração. A seguir, são apresentados os modelos desenvolvidos até o momento.
+Para o desenvolvimento deste modelo, foram adotadas diversas metodologias com o objetivo de otimizar os resultados da instalação do revestimento condutor por meio do método de jateamento. Nesse contexto, foram desenvolvidos modelos para compreender o comportamento do solo em condições específicas, utilizando o modelo viscoplástico de Herschel–Bulkley para caracterizar o comportamento reológico do solo marinho argiloso quando submetido às forças de cisalhamento exercidas pelo jato de fluido de perfuração. A seguir, são apresentados os desenvolvimentos metodológicos e computacionais adotados nesta etapa do projeto.
 
 
-\section{Desenvolvimentos da instalação do revestimento condutor por jateamento}
 
-Neste estudo, as simulações foram realizadas utilizando o software Ansys Fluent, versão 19.2, reconhecido por sua robustez em dinâmica de fluidos computacional (CFD). O Fluent emprega o Método de Volume Finito (FVM), amplamente utilizado devido à sua precisão na discretização e solução das equações de fluxo.
+\section{Fundamentação e Evolução da Modelagem Numérica}
 
-Foi considerado um domínio de 20 metros de largura por 23 metros de altura, sendo 15,5 metros a altura do domínio em relação ao solo. O condutor tem 36'' de diâmetro e 1,5'' de espessura, a coluna de perfuração tem 5'' de diâmetro e a broca tem 17'' 1,2 de diâmetro e 15 cm de altura [2]. O valor do stick-out bit, que é a distância entre a broca e a parte inferior do condutor, é de - 40 cm, conforme mostrado na Figura \ref{fig:Jateamento_dom1}
+A modelagem computacional da instalação do revestimento condutor por jateamento vem sendo progressivamente adotada como alternativa às abordagens puramente empíricas, sobretudo devido às limitações operacionais, logísticas e econômicas associadas a ensaios em escala real. O avanço das ferramentas de Dinâmica dos Fluidos Computacional (CFD) possibilitou representar, com maior nível de detalhe, a interação entre fluido de perfuração, solo marinho e estrutura, permitindo avaliar fenômenos que não são diretamente observáveis em campo (\cite{kan2018field}; \cite{gomes2022modelling}).
+
+As simulações foram conduzidas no software ANSYS Fluent 19.2, amplamente consolidado em aplicações de escoamentos multifásicos e problemas com malha dinâmica. A escolha dessa plataforma permitiu a implementação de modelos reológicos, o acompanhamento explícito das fases e a representação do movimento vertical do condutor ao longo do tempo.
+
+O domínio computacional bidimensional adotado nesta etapa possui 90 m de altura e 80 m de largura, conforme ilustrado na Figura A1. Em estudos anteriores, domínios de menor extensão lateral mostraram-se suscetíveis à influência das condições de contorno, afetando a dissipação de pressão e a evolução do campo de velocidades. Assim, a ampliação do domínio foi necessária para minimizar efeitos numéricos artificiais e garantir que os resultados obtidos refletissem predominantemente os fenômenos físicos associados ao jateamento, e não restrições impostas pelas fronteiras do modelo.
+
+O revestimento condutor foi modelado com 50 m de comprimento e diâmetro externo de 36 polegadas, enquanto a broca apresentou diâmetro de 17,5 polegadas. O bit stick-out, definido como a distância entre a broca e a base do condutor, foi fixado em 0,3 m, e a elevação inicial do conjunto em relação ao fundo do mar foi estabelecida em 0,5. Adicionalmente, foi definida uma linha de monitoramento ao longo do eixo central do condutor, conforme ilustrado na Figura A.1, com o objetivo de rastrear a evolução espacial e temporal de propriedades representativas do processo de jateamento.
+
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_dom1.pdf}
-	\caption{Domínio de modelo inicial. Fonte: Autores (2025)}
+	\caption{Configuração geométrica e sistema de monitoramento. (a) Dimensões do domínio de simulação; (b) Linha central de monitoramento. Fonte: Autores (2025)}
 	\label{fig:Jateamento_dom1}
 \end{figure}
 
-O modelo de Herschel-Bulkley foi utilizado, considerando as propriedades apresentadas na Tabela abaixo.
+Com base em estudos prévios reportados na literatura, a fração volumétrica inicial do solo foi assumida como VoF = 1 (\cite{guo2022evaluation}), representando um material completamente saturado e contínuo. Essa hipótese mostrou-se adequada para a análise do processo de jateamento em solos argilosos moles, além de contribuir para a estabilidade numérica das simulações multifásicas.
+As propriedades físicas e reológicas do solo utilizadas no modelo computacional foram definidas com base em valores típicos reportados na literatura para argilas marinhas moles e são apresentadas na Tabela A1.
+
 
 \begin{table}[H]
 	\centering
@@ -29,88 +37,105 @@ O modelo de Herschel-Bulkley foi utilizado, considerando as propriedades apresen
 		\textbf{Viscosidade (Pa.s)}                    & -             & 0.001         \\ \hline
 		\textbf{Viscosidade de escoamento(Pa.s)}       & -             & -             \\ \hline
 		\textbf{Tensão de escoamento (Pa)}             & 40000         & -             \\ \hline
-		\textbf{Índice de comportamento do fluido (n)} & 0.23          & -             \\ \hline
-		\textbf{Índice de consistência (Pa.s)}         & 216960        & -             \\ \hline
+		\textbf{Índice de comportamento do fluido (n)} & 0.1          & -             \\ \hline
+		\textbf{Índice de consistência (Pa.s)}         & 188310        & -             \\ \hline
 		\textbf{Taxa de escoamento crítica (1/s)}    & 5.11          & -             \\ \hline
 	\end{tabular}
-	\caption{Parâmetros reológicos dos fluidos. Autores: \citet{ferreira2022}; \citet{wang2014numerical}; \citet{pacheco2020numerical}; \citet{salam2019enhancement}}
+	\caption{Parâmetros reológicos dos fluidos. Autores: \citet{gomes2022modelling} \citet{pacheco2020numerical}; \citet{salam2019enhancement}}
 	\label{fig:Jat_tabelaprop}
 \end{table}
 
-Nesta análise, assumiu-se que a velocidade do jato nos bicos de perfuração é uniforme e que a pressão de referência na saída do fluido, no topo do domínio, é zero. Além disso, aplicou-se a condição de parede sem deslizamento, garantindo que a velocidade relativa entre o fluido e a parede seja nula.
+No contexto da dissipação das tensões induzidas pelo jato, os resultados indicaram que a distribuição e a magnitude das tensões no solo são fortemente dependentes do nível de vazão imposto, conforme observado em estudos clássicos de jateamento em solos moles (\cite{beck1991reliable}). Conforme ilustrado na Figura A.2, o perfil de descida ao longo de 30 metros do condutor evidência regiões de intensa fluidização próximas à broca, seguidas por zonas onde ocorre dissipação gradual das tensões ao longo da interface solo-condutor Figura A3.
 
-O modelo adotado considerou um VoF = 0.63, e foram testadas velocidades de 10, 12 e 14 m/s por 5 segundos. As profundidades de escavação observadas foram de aproximadamente 39 cm, 58 cm e 74 cm, correspondendo a 4.60\%, 6.80\% e 8.70\% da profundidade total da região do solo (8.5 m). A Figura \ref{fig:Jateamento_fig2} apresenta os perfis das cavidades resultantes para cada condição testada.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_fig2.pdf}
-	\caption{Perfil da cavidade v = 10 m/s (A), v = 12 m/s (B) e 14 m/s (C) após 5 segundos Fonte: Autores (2025)}
+	\caption{Evolução da fração volumétrica do solo (VoF) durante a descida do revestimento condutor: (a) estado inicial em 0 s; (b) penetração intermediária em 75 s; e (c) profundidade final em 150 s. Fonte: Autores (2025)}
 	\label{fig:Jateamento_fig2}
 \end{figure}
 
-Além disso, avaliou-se o efeito do índice de consistência (K) com base em Wang, para valores de 10,848 Pa·s, 108,480 Pa·s e 216,960 Pa·s. Observou-se que a cavidade se torna maior conforme K diminui, devido à menor força coesiva do solo, tornando-o mais suscetível à erosão. Dessa forma, os resultados mostraram que a deformação do solo foi influenciada tanto pela velocidade do jato quanto pelo índice de consistência (K). A profundidade da escavação aumentou com a velocidade, sugerindo uma relação quase linear. Solos com menor K foram mais suscetíveis à erosão, formando cavidades mais profundas e amplas.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_fig2.pdf}
+	\caption{Imagens da dissipação de pressão em diferentes instantes da operação: (a) 5 minutos; (b) 10 minutos; (c) 15 minutos; e (d) 20 minutos. Fonte: Autores (2025)}
+	\label{fig:Jateamento_fig2}
+\end{figure}
 
-Com base nesses achados, foi possível desenvolver novos modelos incorporando modificações adicionais para aprimorar a análise do processo de jateamento.
+Embora esse mixed soil possa apresentar, ao longo do tempo, um ganho percentual elevado de resistência devido ao efeito de setup, seu valor final de resistência ao cisalhamento tende a permanecer significativamente inferior ao do solo intacto, uma vez que o processo se inicia a partir de um estado de resistência muito reduzida (\cite{beck1991reliable}). Tal comportamento possui implicações diretas na estabilidade do condutor e na integridade do sistema durante e após a instalação.
+
+Entretanto, os resultados do modelo CFD indicaram a migração da água para o interior do fluido viscoso que representa o solo, que não corresponde plenamente ao mecanismo físico esperado em solos reais. Essa limitação decorre da representação do solo como um fluido não newtoniano homogêneo, o que pode superestimar a mobilidade relativa da fase líquida no interior da matriz sólida. Dessa forma, esse aspecto será objeto de investigação em etapas futuras do trabalho, visando o aprimoramento da representação física do solo.
+
 
 \section{Modelagem em desenvolvimento}
 
+Esta seção apresenta a etapa atual de desenvolvimento da modelagem computacional da instalação do revestimento condutor por jateamento. Diferentemente de abordagens anteriores mais simplificadas, a estratégia adotada nesta fase busca aumentar o grau de realismo do modelo por meio da incorporação de funções definidas pelo usuário (User-Defined Functions – UDFs), permitindo a representação explícita de condições operacionais extraídas de dados reais de campo.
+
+
 \subsection{Metodologia atual}
 
-O domínio de simulação 2D foi resolvido utilizando o método de volume finito (FVM), no qual o domínio é discretizado em volumes de controle e as equações determinantes são integradas, assegurando a conservação da massa e do momento. O domínio possui 90 metros de altura e 40 metros de largura, abrangendo as interações entre o condutor, os jatos de fluido e o solo. O condutor, com 50 metros de altura e diâmetro externo de 36 polegadas, é combinado com uma broca de 17,5 polegadas de diâmetro. A distância entre a broca e o fundo do condutor, conhecida como stick-out bit, é de 30 cm, e a distância entre o condutor e o fundo do mar é de 50 cm, conforme pode ser observado na Figura \ref{fig:Jateamento_dom2}.
+A metodologia atualmente em desenvolvimento baseia-se na utilização de três UDFs implementadas em linguagem C++, integradas ao solver do ANSYS Fluent, como ilustra na figura A.4, com o objetivo de representar de forma mais fiel a dinâmica do processo de jateamento e da instalação do revestimento condutor. Essas funções foram empregadas para controlar a descida do condutor, a vazão do jato e a resposta reológica do solo, ampliando a complexidade e a aderência física do modelo numérico.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_dom2.pdf}
-	\caption{Domínio da metodologia desenvolvida Fonte: Autores (2025)}
+	\caption{Esquema de implementação das funções definidas pelo usuário (UDFs) no ANSYS Fluent.}
 	\label{fig:Jateamento_dom2}
 \end{figure}
 
-Para simular o movimento vertical do revestimento condutor durante a operação de jateamento, foi utilizada uma abordagem de malha dinâmica, essencial para modelar fenômenos com mudanças geométricas no domínio, como o deslocamento gradual do condutor em direção ao fundo do mar. A movimentação das zonas móveis foi definida por uma função personalizada (UDF) programada em C++, que determinou a taxa de movimento do condutor em 20 cm/s. A cada incremento de tempo, as novas posições das fronteiras móveis eram calculadas, e o domínio era automaticamente atualizado para refletir essas mudanças, garantindo a consistência da malha e a precisão da solução numérica.
-
-O movimento do condutor foi definido por velocidades lineares prescritas para cada intervalo de tempo, com a malha de volume sendo automaticamente atualizada a cada novo deslocamento. Isso permitiu capturar as interações dinâmicas entre o condutor, solo e fluido de forma precisa. A Figura \ref{fig:Jateamento_malha1} ilustra como a malha foi reformulada durante o deslocamento, garantindo a continuidade do movimento sem comprometer a integridade computacional. Zonas de interesse mais refinadas foram aplicadas na região próxima à broca e no solo ao redor, para uma captura mais precisa dos resultados.
+A cinemática de descida do condutor foi ajustada de acordo com a duração real de um processo de jateamento de Marlim, conforme descrito no Relatório do Jateamento do Revestimento na Figura A.4. Em vez de impor uma velocidade constante arbitrária, a UDF responsável pelo movimento vertical prescreve a descida do condutor em função do tempo total de jateamento observado em campo.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_malha1.pdf}
-	\caption{Reformulação da malha em (A) 0 s e (B) 20 s. Fonte: Autores (2025)}
+	\caption{Trecho do Relatório de Jateamento do Revestimento referente à duração do processo de jateamento.}
 	\label{fig:Jateamento_malha1}
 \end{figure}
 
-As simulações foram realizadas com uma malha computacional composta por 37.9872 nós e elementos triangulares. Essa escolha garantiu um equilíbrio adequado entre eficiência computacional e a resolução necessária para capturar os principais detalhes do processo de jateamento. As propriedades utilizadas são as mesmas apresentadas na Tabela \ref{fig:Jat_tabelaprop}.
+De maneira análoga, a vazão do jato utilizada nas simulações também foi extraída de dados operacionais de um processo real de jateamento de marlim. Essa vazão é imposta por meio de uma UDF específica, possibilitando a aplicação de condições de contorno coerentes com a prática operacional e evitando a adoção de valores puramente paramétricos ou idealizados.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_malha1.pdf}
+	\caption{Tabela extraída do Relatório de Jateamento do Revestimento do campo de Marlim contendo os valores operacionais de vazão do jato.}
+	\label{fig:Jateamento_malha1}
+\end{figure}
+
+A terceira UDF foi utilizada para incorporar ao modelo reológico do solo o valor de SUTT (Shear Undrained Ultimate Strength) obtido a partir do teste GT-34, fornecido como dado de entrada para o presente estudo. Esse parâmetro foi acoplado diretamente ao modelo viscoplástico de Herschel-Bulkley, aumentando a consistência geotécnica da modelagem.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_malha1.pdf}
+	\caption{Tabela de resultados do ensaio geotécnico GT-34 contendo os valores de SUTT.}
+	\label{fig:Jateamento_malha1}
+\end{figure}
+
 
 \subsection{Resultados atuais}
 
-Nos resultados da simulação, o Volume de Fração (VoF) foi monitorado durante a descida de 30 metros do revestimento condutor, um processo que levou 150 segundos. Essa análise permitiu identificar oscilações significativas que poderiam impactar diretamente a eficiência da escavação e a estabilidade do solo ao redor.
-
-Os resultados destacam aspectos operacionais críticos para os processos de jateamento de condutores. A análise das distribuições de VoF e pressão revelou dinâmicas-chave que influenciam a eficiência da escavação e a estabilidade do solo. As oscilações no VoF indicaram áreas de possível instabilidade do solo, enquanto as distribuições de pressão demonstraram o aumento progressivo da resistência do solo durante a descida do condutor.
-
-Operacionalmente, esses resultados oferecem benefícios práticos para a perfuração em águas profundas:
-\begin{itemize}
-	\item Eficiência aprimorada: Monitorar as interações solo-condutor permite otimizar as velocidades do jato, reduzir o tempo de instalação e melhorar a precisão operacional.
-	\item Mitigação de riscos: Identificar caminhos de vazamento através do monitoramento de VoF reduz a probabilidade de instabilidades no cabeçal do poço, garantindo operações mais seguras.
-	\item Melhor adaptabilidade: A estrutura da simulação permite acomodar diferentes tipos de solo e condições operacionais, tornando-a uma ferramenta valiosa para diversos ambientes offshore.
-\end{itemize}
-
-Na Figura \ref{fig:Jateamento_fig3}, é possível observar os caminhos preferenciais à medida que o condutor desce, os quais, segundo \citet{gomes2022modelling}, podem representar um risco significativo para a estabilidade do cabeça do poço, especialmente se gerarem caminhos contínuos que comprometam o contato entre o solo e o condutor. Por outro lado, esses caminhos também contribuem para intensificar o enfraquecimento do solo, facilitando uma escavação mais eficiente e rápida.
+Os resultados atualmente obtidos correspondem à simulação da descida do revestimento condutor ao longo de 7,5 metros, representando a fase inicial do processo de jateamento. Essa etapa permitiu avaliar a resposta do solo às condições operacionais impostas, bem como a influência direta de parâmetros geotécnicos incorporados ao modelo por meio das funções definidas pelo usuário. A Figura A.8 apresenta a evolução da descida do condutor ao longo do tempo durante essa fase inicial da simulação.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_fig3.pdf}
-	\caption{Perfil da cavidade escavada nas profundidades (A) 5,0 m; (B) 10,0 m; (C) 15,0 m; (D) 20,0 m; (E) 25,0 m e (F) 30,0 m. Fonte: Autores (2025)}
+	\caption{Evolução temporal da profundidade de descida do revestimento condutor durante a fase inicial do processo de jateamento, correspondente aos primeiros 7,5 m de descida. Fonte: Autores (2025)}
 	\label{fig:Jateamento_fig3}
 \end{figure}
 
-A Figura 5 mostra o comportamento do deslocamento do condutor ao longo de 150 segundos, representando sua descida linear. O movimento iniciou a uma profundidade de 50 m e atingiu 80 m, cobrindo um total de 30 metros. O deslocamento foi constante ao longo do tempo, com uma taxa de descida de 0,2 m/s.
+A análise concentrou-se na evolução da resistência do solo e na variação da viscosidade aparente, ambas diretamente associadas à modificação do valor de SUTT acoplado ao modelo viscoplástico de Herschel–Bulkley e ao nível de vazão imposto aos jatos de perfuração. Observou-se que alterações nesses parâmetros resultam em mudanças significativas no comportamento reológico do solo, afetando sua resposta ao cisalhamento imposto tanto pelo jato quanto pelo avanço do condutor. A Figura A.9 ilustra a pressão do solo ao longo do tempo.
+
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_fig4.pdf}
-	\caption{Deslocamento do condutor em função do tempo. Fonte: Autores (2025)}
+	\caption{Evolução temporal da pressão do solo durante a fase inicial do processo de jateamento. Fonte: Autores (2025)}
 	\label{fig:Jateamento_fig4}
 \end{figure}
 
-Estes achados confirmaram a eficácia do uso de uma abordagem de malha dinâmica para modelar o jateamento de condutores em solos argilosos, destacando a importância da velocidade do jato e da reologia do solo na eficiência da escavação. Esses resultados podem ajudar a otimizar a instalação, melhorar a integridade dos poços e reduzir riscos operacionais em águas profundas. Embora limitado a uma simulação bidimensional, o estudo abre caminho para pesquisas futuras em simulações tridimensionais e análise de propriedades variáveis do solo.
+Adicionalmente, foi observada a entrada da fase associada ao solo no interior do condutor ao longo da simulação. Esse comportamento sugere a ocorrência de um processo de arraste do material fluidizado para dentro do revestimento, possivelmente relacionado ao nível de vazão imposto no jato. Diante desse resultado, estão sendo conduzidas investigações adicionais com o objetivo de avaliar estratégias para mitigar ou evitar a entrada do solo no interior do condutor, incluindo ajustes nos níveis de vazão, na formulação das funções definidas pelo usuário e na representação numérica do acoplamento entre as fases.
 
 \section{Considerações finais}
 
-Os resultados indicam que a metodologia desenvolvida pode contribuir para a otimização da instalação, a melhoria da integridade dos poços e a redução de riscos operacionais, especialmente em cenários de águas profundas. No entanto, as simulações foram realizadas em um contexto bidimensional, o que limita a captura de variações espaciais complexas do solo. Como avanço futuro, recomenda-se a incorporação de modelagem tridimensional e a avaliação de propriedades variáveis do solo, permitindo uma representação mais realista do comportamento do sistema durante o jateamento.
+O presente trabalho apresentou o estágio atual de desenvolvimento de uma metodologia computacional para a modelagem da instalação de revestimento condutor por jateamento, com foco na incorporação progressiva de maior realismo físico e operacional ao modelo numérico. A utilização de funções definidas pelo usuário permitiu integrar ao ambiente de simulação dados reais de operação e de ensaios geotécnicos, elevando o nível de complexidade e a representatividade do problema analisado.
+
+Apesar dos avanços alcançados, reconhece-se que a modelagem ainda se encontra em desenvolvimento. Limitações inerentes à representação do solo como um meio contínuo viscoplástico permanecem, especialmente no que diz respeito à migração da água no interior do material modelado. Esses aspectos serão objeto de investigações, com vistas ao aprimoramento da representação física do solo e à ampliação do escopo das simulações.
