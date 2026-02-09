@@ -19,9 +19,9 @@ O revestimento condutor foi modelado com 50 m de comprimento e diâmetro externo
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_dom1.pdf}
+	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_01.pdf}
 	\caption{Configuração geométrica e sistema de monitoramento. (a) Dimensões do domínio de simulação; (b) Linha central de monitoramento. Fonte: Autores (2025)}
-	\label{fig:Jateamento_dom1}
+	\label{fig:Jateamento_01}
 \end{figure}
 
 Com base em estudos prévios reportados na literatura, a fração volumétrica inicial do solo foi assumida como VoF = 1 (\cite{guo2022evaluation}), representando um material completamente saturado e contínuo. Essa hipótese mostrou-se adequada para a análise do processo de jateamento em solos argilosos moles, além de contribuir para a estabilidade numérica das simulações multifásicas.
@@ -50,16 +50,16 @@ No contexto da dissipação das tensões induzidas pelo jato, os resultados indi
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_fig2.pdf}
+	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_02.pdf}
 	\caption{Evolução da fração volumétrica do solo (VoF) durante a descida do revestimento condutor: (a) estado inicial em 0 s; (b) penetração intermediária em 75 s; e (c) profundidade final em 150 s. Fonte: Autores (2025)}
-	\label{fig:Jateamento_fig2}
+	\label{fig:Jateamento_02}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_fig2.pdf}
+	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_03.pdf}
 	\caption{Imagens da dissipação de pressão em diferentes instantes da operação: (a) 5 minutos; (b) 10 minutos; (c) 15 minutos; e (d) 20 minutos. Fonte: Autores (2025)}
-	\label{fig:Jateamento_fig2}
+	\label{fig:Jateamento_03}
 \end{figure}
 
 Embora esse mixed soil possa apresentar, ao longo do tempo, um ganho percentual elevado de resistência devido ao efeito de setup, seu valor final de resistência ao cisalhamento tende a permanecer significativamente inferior ao do solo intacto, uma vez que o processo se inicia a partir de um estado de resistência muito reduzida (\cite{beck1991reliable}). Tal comportamento possui implicações diretas na estabilidade do condutor e na integridade do sistema durante e após a instalação.
@@ -78,36 +78,36 @@ A metodologia atualmente em desenvolvimento baseia-se na utilização de três U
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_dom2.pdf}
+	\includegraphics[width=0.6\linewidth]{jateamento/Jateamento_04.pdf}
 	\caption{Esquema de implementação das funções definidas pelo usuário (UDFs) no ANSYS Fluent.}
-	\label{fig:Jateamento_dom2}
+	\label{fig:Jateamento_04}
 \end{figure}
 
 A cinemática de descida do condutor foi ajustada de acordo com a duração real de um processo de jateamento de Marlim, conforme descrito no Relatório do Jateamento do Revestimento na Figura A.4. Em vez de impor uma velocidade constante arbitrária, a UDF responsável pelo movimento vertical prescreve a descida do condutor em função do tempo total de jateamento observado em campo.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_malha1.pdf}
+	\includegraphics[width=0.8\linewidth]{jateamento/Jateamento_05.pdf}
 	\caption{Trecho do Relatório de Jateamento do Revestimento referente à duração do processo de jateamento.}
-	\label{fig:Jateamento_malha1}
+	\label{fig:Jateamento_05}
 \end{figure}
 
 De maneira análoga, a vazão do jato utilizada nas simulações também foi extraída de dados operacionais de um processo real de jateamento de marlim. Essa vazão é imposta por meio de uma UDF específica, possibilitando a aplicação de condições de contorno coerentes com a prática operacional e evitando a adoção de valores puramente paramétricos ou idealizados.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_malha1.pdf}
+	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_06.pdf}
 	\caption{Tabela extraída do Relatório de Jateamento do Revestimento do campo de Marlim contendo os valores operacionais de vazão do jato.}
-	\label{fig:Jateamento_malha1}
+	\label{fig:Jateamento_06}
 \end{figure}
 
 A terceira UDF foi utilizada para incorporar ao modelo reológico do solo o valor de SUTT (Shear Undrained Ultimate Strength) obtido a partir do teste GT-34, fornecido como dado de entrada para o presente estudo. Esse parâmetro foi acoplado diretamente ao modelo viscoplástico de Herschel-Bulkley, aumentando a consistência geotécnica da modelagem.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_malha1.pdf}
+	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_07.pdf}
 	\caption{Tabela de resultados do ensaio geotécnico GT-34 contendo os valores de SUTT.}
-	\label{fig:Jateamento_malha1}
+	\label{fig:Jateamento_07}
 \end{figure}
 
 
@@ -117,9 +117,9 @@ Os resultados atualmente obtidos correspondem à simulação da descida do reves
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_fig3.pdf}
+	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_08.pdf}
 	\caption{Evolução temporal da profundidade de descida do revestimento condutor durante a fase inicial do processo de jateamento, correspondente aos primeiros 7,5 m de descida. Fonte: Autores (2025)}
-	\label{fig:Jateamento_fig3}
+	\label{fig:Jateamento_08}
 \end{figure}
 
 A análise concentrou-se na evolução da resistência do solo e na variação da viscosidade aparente, ambas diretamente associadas à modificação do valor de SUTT acoplado ao modelo viscoplástico de Herschel–Bulkley e ao nível de vazão imposto aos jatos de perfuração. Observou-se que alterações nesses parâmetros resultam em mudanças significativas no comportamento reológico do solo, afetando sua resposta ao cisalhamento imposto tanto pelo jato quanto pelo avanço do condutor. A Figura A.9 ilustra a pressão do solo ao longo do tempo.
@@ -127,9 +127,9 @@ A análise concentrou-se na evolução da resistência do solo e na variação d
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_fig4.pdf}
+	\includegraphics[width=0.7\linewidth]{jateamento/Jateamento_09.pdf}
 	\caption{Evolução temporal da pressão do solo durante a fase inicial do processo de jateamento. Fonte: Autores (2025)}
-	\label{fig:Jateamento_fig4}
+	\label{fig:Jateamento_09}
 \end{figure}
 
 Adicionalmente, foi observada a entrada da fase associada ao solo no interior do condutor ao longo da simulação. Esse comportamento sugere a ocorrência de um processo de arraste do material fluidizado para dentro do revestimento, possivelmente relacionado ao nível de vazão imposto no jato. Diante desse resultado, estão sendo conduzidas investigações adicionais com o objetivo de avaliar estratégias para mitigar ou evitar a entrada do solo no interior do condutor, incluindo ajustes nos níveis de vazão, na formulação das funções definidas pelo usuário e na representação numérica do acoplamento entre as fases.
