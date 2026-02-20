@@ -168,23 +168,9 @@ Inicialmente, o efeito do contato é realizado pela correção da diferença de 
 	
 	\subsubsection{Propriedades dos materiais}
 	
-	Tem-se que, aspectos como porosidade, coeficiente de Poisson, coeficiente de empuxo lateral e interação de contato são parâmetros essenciais para modelar o problema em questão, determinando o comportamento e a resposta dos materiais envolvidos na análise. Um exemplo disso é que a porosidade é influenciada pelo tipo de solo e tem um efeito significativo no fluxo de fluido dentro do meio, ao passo que o coeficiente de Poisson avalia a relação entre a deformação radial e axial de um material quando sujeito a carregamento unidimensional \citep{federico2009rest}. 
+	A definição adequada das propriedades dos materiais e dos parâmetros do modelo constitutivo é essencial para garantir a representatividade das simulações numéricas. Assim, de acordo com os dados de resistência à compressão foi possível classificar o solo como uma argila muito mole, considerando-se o critério adotado por \citet{maragon2008}.
 	
-	A consideração do empuxo de terra é fundamental em sistemas com estruturas envoltas por solo. O empuxo de terra é uma ação produzida pelo maciço terroso sobre as obras com ele em contato \citep{maragon2008}, logo, essa ação vai influenciar nas tensões agindo sobre o solo no momento inicial da cravação. No Anura3D, é possível iniciar as tensões no solo através do procedimento K0, pré-definido no solver. O parâmetro K0 baseia-se na relação entre a tensão vertical e a tensão horizontal, que é função da elasticidade do material, mas também pode ser definido em função do coeficiente de Poisson, conforme apresentado na Equação \ref{eq:eq_prop}
-	
-	\begin{equation}
-		\kappa _{0}=\frac{\nu }{1-\nu }
-		\label{eq:eq_prop}
-	\end{equation}
-	
-	De acordo com os dados de resistência à compressão foi possível classificar o solo como uma argila muito mole, considerando-se o critério adotado por Marangon (2018). Os dados de ensaio CPTu utilizados são disponibilizados pela operadora, a partir dos quais constatou-se que o modelo constitutivo de Mohr-Coulomb seria adequado para modelar a resposta do solo. Além disso, é válido destacar que, embora o solo seja um material heterogêneo, para o presente trabalho foi utilizada uma única camada, a fim de simplificar o modelo em análise. A equação do critério de Mohr-Coulomb estabelece uma relação entre a tensão de cisalhamento ($\tau$), a coesão ($c$), a tensão normal ($\sigma_{n}$) e a tangente do ângulo de atrito interno (tan($\phi$)) \citep{dasbraja}.
-	
-	\begin{equation}
-		\tau =c+\sigma _{n}\cdot tan(\phi )
-		\label{eq:eq_prop2}
-	\end{equation}
-	
-	No modelo, o revestimento condutor possui propriedades do aço é considerado como um corpo rígido, com densidade de 7860 kg/m³. A Tabela \ref{tab:propriedades_crav} contém as propriedades dos materiais considerados para modelar o solo coesivo não drenado em questão.  
+	Os dados de ensaio CPTu utilizados são disponibilizados pela operadora, a partir dos quais constatou-se que o modelo constitutivo de Mohr-Coulomb seria adequado para modelar a resposta do solo. A Tabela \ref{tab:propriedades_crav} contém as propriedades dos materiais considerados para modelar o solo coesivo não drenado em questão.
 	
 	\begin{table}[H]
 		\centering
@@ -280,49 +266,78 @@ Inicialmente, o efeito do contato é realizado pela correção da diferença de 
 		\label{tab:propriedades_crav}
 	\end{table}
 	
-	Para representar com precisão a variação do comportamento do solo em função da profundidade, a Figura \ref{fig:cracavao_solo} apresenta a evolução da resistência à compressão ao longo do perfil do solo. Essa representação evidencia as transições entre as camadas, demonstrando um aumento progressivo da resistência à medida que a profundidade se aprofunda.
+	No modelo, o revestimento condutor possui propriedades do aço é considerado como um corpo rígido, com densidade de 7860 kg/m³.   
+
+	\subsection{Análise da influência do ângulo de dilatância}
+
+Com base nas propriedades definidas para o solo e para o condutor, foram realizadas análises numéricas destinadas a investigar a influência dos parâmetros constitutivos na resposta do sistema. Entre eles, destaca-se o ângulo de dilatância, cuja variação foi utilizada para avaliar seus efeitos no comportamento de penetração e na resistência mobilizada durante a cravação.
+
+O ângulo de dilatância $(\psi)$ foi conceituado como uma medida da expansão volumétrica durante o cisalhamento em materiais granulares. Sua relação com a resistência ao cisalhamento foi formalizada por \citet{rowe1962stress} através da teoria da dilatância por intertravamento de partículas, expressa pela Equação \ref{eq:dilatancia}: 
 	
+	\begin{equation}
+	\frac{\sigma1}{\sigma3}=\left( \frac{1+sin\phi}{1-sin\phi} \right)\bullet \left( \frac{1+sin\psi}{1+sin\psi} \right)
+	\label{eq:dilatancia}
+	\end{equation}
+
+O ângulo de dilatância, em análises geotécnicas, costuma ser assumido
+como constante ao longo do processo de plastificação. O valor $\psi = 0$ indica que
+o volume do solo é preservado durante o cisalhamento. Em solos argilosos,
+mesmo na presença de sobreconsolidação, a dilatância geralmente é muito
+baixa ($\psi$$\sim$ 0). Já em materiais granulares, como areias e cascalhos, com um
+ângulo de atrito interno $\varphi>$ 30°, o ângulo de dilatância apresenta forte
+dependência do atrito interno. Para solos não coesivos, é comum estimar o
+ângulo de dilatância como mostra a Equação \ref{eq:dilatancia2}:
+
+	\begin{equation}
+	\psi=\varphi-30°
+	\label{eq:dilatancia2}
+\end{equation}
+
+Neste estudo a respeito da influência do ângulo de dilatância, foi realizada uma análise numérica do processo de cravação de um revestimento condutor em solo não coesivo, representado como um material granular modelado pelo critério constitutivo de Mohr-Coulomb. O domínio de solo foi definido com propriedades geotécnicas típicas de materiais arenosos, incluindo ângulo de atrito interno, módulo de elasticidade e coesão.
+
+Com o objetivo de avaliar a influência do ângulo de dilatância (($\psi$) no comportamento do solo durante o processo de cravação, foram consideradas diferentes variações desse parâmetro, adotando-se os valores de 0°, 5°, 10°, 15° e 20°. Essa estratégia permitiu analisar a sensibilidade da resposta numérica às distintas intensidades de dilatação, possibilitando identificar seus efeitos tanto no comportamento do solo quanto na interação com o revestimento ao longo da simulação.
+
+A análise dos resultados concentrou-se na influência do ângulo de dilatância na profundidade de penetração do condutor ao longo do tempo, conforme apresentado na Figura 3. Observa-se que todas as simulações atingem uma profundidade máxima, porém com taxas de penetração distintas. De modo geral, o aumento do ângulo de dilatância resulta na redução da profundidade alcançada, indicando maior resistência do solo à cravação, como pode ser observado na Figura \ref{fig:Figura_dilatancia01}.
+
 	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.7\linewidth]{cravacao/cravacao_solo.pdf}
-		\caption{Variação da resistência à compressão ao longo da profundidade. Fonte: Autores (2024)}
-		\label{fig:cracavao_solo}
-	\end{figure}
-	
-	
-	\subsubsection{Automatização da etapa de martelamento}
-	
-	Para simular a etapa de martelamento, conforme mencionado anteriormente, algumas simplificações estão sendo adotadas e aprimoradas à medida que o modelo evolui. No modelo atual, a modelagem do martelamento é realizada por meio da aplicação de uma velocidade inicial, que deve ser definida manualmente nas configurações do CPS do modelo.
-	
-	Como mostrado na Figura \ref{fig:automatic_fig2}, a definição da velocidade inicial ocorre durante o desenvolvimento do modelo. Para garantir que essa velocidade seja aplicada sempre que necessário, representando os impactos dessa etapa, é necessário ajustar o CPS, ativando a velocidade conforme a demanda. O intervalo entre os impactos foi definido em 1 segundo, ou seja, a cada segundo, a velocidade inicial é ativada novamente para gerar um novo impacto.
-	
+	\centering
+	\includegraphics[width=0.7\linewidth]{cravacao/Figura_dilatancia01.pdf}
+	\caption{Gráfico comparativo de profundidade atingida com os diferentes ângulos de dilatância (Autores, 2025)}
+	\label{fig:Figura_dilatancia01}
+\end{figure}
+
+A Figura \ref{fig:Figura_dilatancia02} mostra a distribuição das tensões efetivas no solo durante a cravação do condutor. Observa-se concentração de tensões próximas à ponta e ao entorno do revestimento, indicando as regiões onde a resistência do solo é mobilizada. Uma zona intermediária com gradiente de tensões sugere plastificação e rearranjo das partículas, enquanto áreas mais distantes apresentam menores níveis de tensão por ainda não terem sido significativamente solicitadas. Esses resultados evidenciam a redistribuição de tensões causada pela penetração e reforçam a influência do comportamento dilatante na resposta do maciço.
+
 	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.8\linewidth]{cravacao/Automatic_fig2.pdf}
-		\caption{Implementação dos impactos na etapa do martelamento. Fonte: Autores (2025)}
-		\label{fig:automatic_fig2}
-	\end{figure}
-	
-	Inicialmente, a modificação no CPS do modelo a cada 1 segundo era feita manualmente, exigindo que o desenvolvedor realizasse a alteração e retomasse a execução do modelo. Esse processo começou a se tornar demorado e pouco eficiente, tornando necessária uma solução automatizada. Para otimizar o tempo dos desenvolvedores e acelerar a obtenção de resultados sobre o progresso dos modelos nesta etapa, foi desenvolvido um programa utilizando a linguagem Python para automatizar esse procedimento. A Figura abaixo apresenta um fluxograma básico ilustrando o funcionamento do programa, permitindo a automação desse processo.
-	
+	\centering
+	\includegraphics[width=0.3\linewidth]{cravacao/Figura_dilatancia02.pdf}
+	\caption{Magnitude da tensão efetiva ao longo do tempo (Autores, 2025)}
+	\label{fig:Figura_dilatancia02}
+\end{figure}
+
+Conclui-se que o ângulo de dilatância exerce influência significativa na resposta do solo durante a cravação do revestimento, afetando a profundidade de penetração e distribuição de tensões. Os resultados evidenciam a sensibilidade do modelo numérico a esse parâmetro e reforçam a importância de sua adequada consideração para representar de forma realista a interação solo-estrutura em solos não coesivos.
+
+\subsection{MPM Puro e MPM de integração mista}
+
+O MPM consiste em uma abordagem híbrida Euleriana-Lagrangiana que combina as vantagens de métodos baseados em partículas e em malha. Nesse contexto, o domínio computacional é discretizado por uma malha Euleriana de fundo, enquanto os corpos materiais são representados por partículas Lagrangianas que transportam todas as propriedades constitutivas, como tensão, deformação e variáveis de histórico, movimentando-se através da malha. Essa dupla representação permite tratar grandes deformações de forma natural, evitando problemas de distorção de malha típicos de formulações puramente Lagrangianas, ao mesmo tempo em que preserva o acompanhamento do histórico do material.
+
+A simulação da penetração de um corpo rígido em solo envolve deformações elevadas, situação em que o esquema convencional do MPM pode apresentar instabilidades numéricas associadas ao cruzamento de partículas entre elementos. Quando uma partícula atravessa a fronteira de um elemento, descontinuidades nos gradientes das funções de forma podem gerar forças nodais não físicas, reduzindo a precisão da solução.
+
+Como alternativa para mitigar esse efeito, emprega-se o esquema de integração mista implementado no Anura3D. Nesse procedimento, calcula-se inicialmente uma tensão representativa constante para cada elemento, obtida pela média ponderada das tensões dos pontos materiais nele contidos. Em seguida, as forças internas são avaliadas por meio de integração de Gauss, de forma análoga aos procedimentos clássicos do Método dos Elementos Finitos, proporcionando maior estabilidade e suavidade na distribuição de tensões.
+
+Considerando esse contexto, buscou-se analisar a operação da instalação de revestimento condutor em solos coesivos sob condição não drenada, típicos de ambientes offshore, por meio da comparação entre duas abordagens numéricas: o MPM convencional e o esquema de integração MPM-Mixed, que incorpora integração de Gauss. Assim, teve como objetivo avaliar qual formulação apresentava melhor desempenho e adaptabilidade para a simulação do processo.
+
+A Figura \ref{fig:Figura_mpm01} apresenta a comparação entre os esquemas de integração MPM puro e MPM-Mixed. Observa-se que o MPM puro gera distribuições de tensões mais irregulares, com flutuações abruptas e zonas localizadas de alta intensidade, indicando a presença de instabilidades numéricas associadas ao cruzamento de células. Em contraste, o esquema MPM-Mixed produz campos de tensão mais suaves e contínuos, com transições progressivas entre regiões de diferentes magnitudes e redução de picos espúrios próximos às fronteiras rígidas. 
+
 	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.8\linewidth]{cravacao/Automatic_fig1.pdf}
-		\caption{Fluxograma da automatização da implementação dos impactos na etapa do martelamento. Fonte: Autores (2025)}
-		\label{fig:automatic_fig1}
-	\end{figure}
-	
-	Quando o código é executado, alguns dados de entrada são fornecidos, como o nome da pasta, a quantidade de impactos e o intervalo entre eles, conforme definido pelo desenvolvedor. A Figura abaixo ilustra essas etapas.
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.8\linewidth]{cravacao/Automatic_fig3.pdf}
-		\caption{Janelas de informações de entrada do código. Fonte: Autores (2025)}
-		\label{fig:automatic_fig1}
-	\end{figure}
-	
-	Isso permitiu tornar o processo de aplicação dos impactos significativamente mais rápido, aumentando a eficiência do trabalho. Como resultado, os dados e análises podem ser obtidos em um tempo muito menor em comparação ao método manual utilizado anteriormente.
-	
+	\centering
+	\includegraphics[width=0.8\linewidth]{cravacao/Figura_mpm01.pdf}
+	\caption{Comparação da magnitude da tensão efetiva (kPa) para: (a) MPM puro; (b) Integração mista de MPM; (c) Profundidade de penetração versus tempo (Autores, 2025).}
+	\label{fig:Figura_mpm01}
+\end{figure}
+
+Além disso, a análise da evolução da profundidade ao longo do tempo mostra que ambos os métodos atingem a profundidade final semelhante, porém a integração mista apresenta maior eficiência computacional, alcançando o resultado em menor tempo. Esses resultados evidenciam a superior estabilidade e desempenho do esquema MPM-Mixed para a simulação do problema analisado.
+
 	\subsection{Resultados atuais}
 	
 	Os resultados do modelo numérico desenvolvido mostram uma forte concordância com os dados operacionais reais, validando a aplicação do Método do Ponto Material (MPM) na simulação da instalação de revestimentos de condutores em solos argilosos offshore. A precisão na previsão dos deslocamentos e das distribuições de tensão ao redor do condutor confirma a adequação das formulações empregadas para representar as complexas interações solo-estrutura em ambientes offshore desafiadores.
