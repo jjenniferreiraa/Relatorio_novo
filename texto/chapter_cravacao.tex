@@ -321,7 +321,7 @@ A simulação da penetração de um corpo rígido em solo envolve deformações 
 
 Como alternativa para mitigar esse efeito, emprega-se o esquema de integração mista implementado no Anura3D. Nesse procedimento, calcula-se inicialmente uma tensão representativa constante para cada elemento, obtida pela média ponderada das tensões dos pontos materiais nele contidos. Em seguida, as forças internas são avaliadas por meio de integração de Gauss, de forma análoga aos procedimentos clássicos do Método dos Elementos Finitos, proporcionando maior estabilidade e suavidade na distribuição de tensões.
 
-Considerando esse contexto, buscou-se analisar a operação da instalação de revestimento condutor em solos coesivos sob condição não drenada, típicos de ambientes offshore, por meio da comparação entre duas abordagens numéricas: o MPM convencional e o esquema de integração MPM-Mixed, que incorpora integração de Gauss. Assim, teve como objetivo avaliar qual formulação apresentava melhor desempenho e adaptabilidade para a simulação do processo.
+Considerando esse contexto, buscou-se analisar a operação da instalação de revestimento condutor em solos coesivos sob condição não drenada, típicos de ambientes \textit{offshore}, por meio da comparação entre duas abordagens numéricas: o MPM convencional e o esquema de integração MPM-Mixed, que incorpora integração de Gauss. Assim, teve como objetivo avaliar qual formulação apresentava melhor desempenho e adaptabilidade para a simulação do processo.
 
 A Figura \ref{fig:Figura_mpm01} apresenta a comparação entre os esquemas de integração entre o MPM puro e o MPM-Mixed. Observa-se que o MPM puro gera distribuições de tensões mais irregulares, com flutuações abruptas e zonas localizadas de alta intensidade, indicando a presença de instabilidades numéricas associadas ao cruzamento de células. Em contraste, o esquema MPM-Mixed produz campos de tensão mais suaves e contínuos, com transições progressivas entre regiões de diferentes magnitudes e redução de picos espúrios próximos às fronteiras rígidas. 
 
@@ -332,7 +332,7 @@ A Figura \ref{fig:Figura_mpm01} apresenta a comparação entre os esquemas de in
 	\label{fig:Figura_mpm01}
 \end{figure}
 
-Além disso, a análise da evolução da profundidade ao longo do tempo mostra que ambos os métodos atingem a profundidade final semelhante, porém a integração mista apresenta maior eficiência computacional, alcançando o resultado em menor tempo. Esses resultados evidenciam a superior estabilidade e desempenho do esquema MPM-Mixed para a simulação do problema analisado.
+Além disso, a análise da evolução da profundidade ao longo do tempo mostra que ambos os métodos atingem a profundidade final semelhante, porém a integração mista apresenta maior eficiência computacional, alcançando o resultado em menor tempo. Esses resultados evidenciam a superior estabilidade e desempenho do esquema de integração MPM-Mixed  para a simulação do problema analisado.
 
 	\subsection{Resultados atuais}
 	
