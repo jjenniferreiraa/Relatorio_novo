@@ -94,7 +94,7 @@ Inicialmente, o efeito do contato é realizado pela correção da diferença de 
 	
 	\subsection{Algoritmo do corpo rígido}
 	
-	O esquema de integração explícita é condicionalmente estável. O tamanho do passo de tempo para uma solução estável decresce com o aumento da rigidez do material e com a diminuição do tamanho do elemento da malha computacional \citep{martinelli2020numerical}. A fim de reduzir o custo computacional, o condutor é modelado como um corpo rígido através do algoritmo desenvolvido por \citet{zambrano2020numerical}. Esta aproximação desconsidera a propagação de onda na estrutura e torna-se válida porque a rigidez do aço do condutor é muito maior se comparada à rigidez do solo \citep{galavi2019}.
+	O esquema de integração explícita é condicionalmente estável. O tamanho do passo de tempo para uma solução estável decresce com o aumento da rigidez do material e com a diminuição do tamanho do elemento da malha computacional \citep{martinelli2020numericalm}. A fim de reduzir o custo computacional, o condutor é modelado como um corpo rígido através do algoritmo desenvolvido por \citet{zambrano2020numerical}. Esta aproximação desconsidera a propagação de onda na estrutura e torna-se válida porque a rigidez do aço do condutor é muito maior se comparada à rigidez do solo \citep{galavi2019}.
 	
 	\subsection{Malha móvel}
 	
@@ -102,46 +102,42 @@ Inicialmente, o efeito do contato é realizado pela correção da diferença de 
 	
 	\subsection{Histórico de desenvolvimento do modelo numérico atual}
 	
-	Para que a geometria do sistema seja devidamente representativo, deve-se construir um modelo numérico característico da situação real do problema proposto, considerando-se as variáveis de projeto, as restrições adotadas e o tamanho ideal do domínio, que seja suficiente para evitar efeitos de borda,  mas que tenha o menor custo computacional possível sem comprometer a qualidade dos resultados da simulação. Ao calibrar um modelo numérico, por muitas vezes, deve-se adaptar a geometria e realizar o remalhamento da malha computacional. Segue um breve histório dos modelos de cravação de condutor prévios, os quais foram importantes para se observar as condições que deveriam ser readequadas até que se chegasse ao modelo atual em desenvolvimento. 
+	Para que a geometria do sistema seja devidamente representativo, deve-se construir um modelo numérico característico da situação real do problema proposto, considerando-se as variáveis de projeto, as restrições adotadas e o tamanho ideal do domínio, que seja suficiente para evitar efeitos de borda,  mas que tenha o menor custo computacional possível sem comprometer a qualidade dos resultados da simulação. Ao calibrar um modelo numérico, por muitas vezes, deve-se adaptar a geometria e realizar o remalhamento da malha computacional. 
 	
-	Em todos os modelos desenvolvidos, simplificações foram adotadas a fim de se reduzir o custo computacional exigido nas simulações. Dentre elas, adotou-se uma geometria 2D axissimétrica. Isto significa que este sistema possui simetria em relação ao seu eixo vertical em um espaço bidimensional. Outra simplificação relevante foi introduzir uma ponta triangular, na base do condutor, com a finalidade de se reduzir instabilidades numéricas nesta região. No entanto, na região apelidada de "\textit{shoulder}", o encontro entre a ponta e a base do condutor, estava ocorrendo um fenômeno numérico indesejado chamado de "interpenetração", nela duas ou mais partículas materiais ocupam o mesmo espaço simultaneamente, ou seja, suas fronteiras se sobrepõem. 
+	O modelo numérico até então desenvolvido conseguiu cravar até a metade da segunda camada de solo, totalizando cerca de 13,5 m de profundidade a partir da \textit{mudline}. Depois disso, a simulação abortou por problemas que, ainda nos dias de hoje, estão sob análise. Provavelmente, ainda são problemas numéricos relacionados às partículas nas regiões de \textit{shoulder} (o encontro entre a ponta e a base do condutor) e ponta do condutor, onde ocorrem grandes concentrações de tensão. No "\textit{shoulder}" é comum que um fenômeno numérico indesejado, a "interpenetração", ocorra. Nele duas ou mais partículas materiais ocupam o mesmo espaço simultaneamente, ou seja, suas fronteiras se sobrepõem. A interpenetração se dá, por exemplo, devido a uma deformação extrema nos corpos, é o que se observa no problema proposto, dado que há uma estrutura rígida penetrando um corpo altamente deformável. Ou, então, devido a erros numéricos, como a discretização inadequada das equações de movimento. 
 	
-	A interpenetração se dá, por exemplo, devido a uma deformação extrema nos corpos, é o que se observa no problema proposto, dado que há uma estrutura rígida penetrando um corpo altamente deformável. Ou, então, devido a erros numéricos, como a discretização inadequada das equações de movimento. No caso em questão, provavelmente ocorreu porque no vértice do \textit{shoulder}, estavam constando dois vetores normais, que "confundiam" o movimento das partículas, resultando na interpenetração, conforme mostra a Figura \ref{fig:interpenetracao}. 
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.8\linewidth]{cravacao/interpenetracao.pdf}
-		\caption{Interpenetração dos pontos materiais do solo no condutor, para onde as setas vermelhas apontam. O \textit{shoulder} é destacado pelas setas amarelas. Os pontos materiais azuis são a discretização do solo; os vermelhos, a discretização do revestimento condutor. Fonte: Autores (2025)}
-		\label{fig:interpenetracao}
-	\end{figure}
-	
-	
-	A Figura \ref{fig:historico1} mostra alguns dos modelos principais desenvolvidos ou adaptados ao estudo de caso. Uma série de adequações foram realizadas para aumentar a estabilidade do modelo, como o refinamento da malha computacional, redução ou expansão da geometria, alteração na especificação dos pontos materiais, ajustes no passo de tempo, entre outros. No entanto, nestes modelos, ainda era recorrente interpenetração no vértice do \textit{shoulder}, causando instabilidades numéricas, como o descolamento do solo da parede do condutor. Ou, então, uma adesão excessiva do solo à essa parede, que resultava na sua "explosão" em regiões próximas ao revestimento. Eventos que impediam, inclusive, o avanço do condutor em profundidades maiores, que só alcançava alguns centímetros de deslocamento vertical, ainda na fase de peso próprio da cravação. Isto pode ser ilustrado na Figura \ref{fig:historico1}. Nestes modelos, a simulação já iniciava com o condutor pre-cravado no solo, no entanto, o avanço era de 50 cm a 1,3m e, em seguida, a simulação abortava.
+	No caso em questão, provavelmente ocorreu porque no vértice do \textit{shoulder}, estavam constando dois vetores normais, que "confundiam" o movimento das partículas, resultando na interpenetração, conforme mostra a Figura \ref{fig:mudanca_ponta}. Um dos pontos revisados foi o remalhamento e a alteração no contato solo-estrutura.  Salienta-se que ao, realizar a suavização do \textit{shoulder}, é necessário se atentar ao refinamento da malha nesta região. Um refinamento muito excessivo pode elevar bastante o custo computacional da simulação. A Figura \ref{fig:mudanca_ponta}a ilustra a configuração da ponta deste modelo numérico, um um \textit{shoulder} mais acentuado e a ponta menos refinada. A Figura \ref{fig:mudanca_ponta}b já mostra a nova configuração desta mesma região que, embora apresente uma mudança sutil, melhorou consideravelmente os resultados.
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=1\linewidth]{cravacao/historico1.pdf}
-		\caption{Modelos desenvolvidos na fase inicial do projeto}
-		\label{fig:historico1}
+		\includegraphics[width=0.7\linewidth]{cravacao/mudanca_ponta.pdf}
+		\caption{Breve descrição da transição realizada na ponta do condutor. Fonte: Autores (2026)}
+		\label{fig:mudanca_ponta}
 	\end{figure}
-	
-	Uma solução encontrada foi voltar a simplificar a geometria e reanalisar todos os aspectos numéricos separadamente, assim como a sua reestruturação. Um dos pontos revisados foi o remalhamento e a alteração no contato solo-estrutura. O problema do contato foi resolvido suavizando-se o vértice do \textit{shoulder}, deixando-o mais arredondado, o que solucionou a sobreposição das normais, evitando a interpenetração. Nos modelos anteriores, a divergência da solução ocorria logo no início da simulação. Com a suavização do \textit{shoulder}, o condutor vem alcançando profundidades cada vez maiores. Vários testes foram realizados para se chegar à configuração atual. A Figura \ref{fig:interpenetracao2} mostra uma breve descrição desse processo. Salienta-se que ao, realizar a suavização do \textit{shoulder}, é necessário se atentar ao refinamento da malha nesta região. Um refinamento muito excessivo pode elevar bastante o custo computacional da simulação. 
+
+Em relação ao último resultado, o perfil de descida do condutor ao longo do tempo pode ser analisado na Figura \ref{fig:cravacao_result2}. No início da operação, durante a fase de peso próprio, a velocidade de descida do condutor reduz gradualmente até se estabilizar por volta dos 5 segundos. A partir desse ponto, iniciam-se os impactos de martelamento.
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=1\linewidth]{cravacao/interpenetracao2.pdf}
-		\caption{a) breve descrição da transição realizada na ponta do condutor; b) geometria da ponta de adotada em alguns dos modelos anteriores, simulação abortada 11 \textit{steps} após o início da cravação; c) geometria da ponta adotada atualmente.}
-		\label{fig:interpenetracao2}
+		\includegraphics[width=0.8\linewidth]{cravacao/cravacao_result2.pdf}
+		\caption{Profundidade alcançada após a fase de martelamento. Atualmente, o condutor está em uma profundidade de aproximadamente 13,50 metros. Fonte: Autores (2025)}
+		\label{fig:cravacao_result2}
 	\end{figure}
 	
-	A partir da geometria da Figura \ref{fig:historico2}a, observou-se que o solo apresentou um comportamento mais fisicamente consistente e que a simulação não mais abortava. Em seguida, uma maior complexidade foi adicionada ao se aumentar a geometria e alterar a malha computacional, como pode ser observado em Figura \ref{fig:historico2}b, aumentando o seu refinamento na região de interesse (próxima à ponta) e, consequentemente, condensando mais pontos materiais nela. Isso ajuda a obter uma melhor precisão dos resultados. Nas regiões mais distantes da região de interesse, o refinamento foi reduzido, consequentemente, otimizando o custo computacional.  Outra adaptação importante foi considerar o condutor com a ponta fechada. A ponta fechada ocorre devido ao fenômeno de "embuchamento", no qual um plug de solo argiloso se forma logo no início da cravação, ocupando a secção transversal do condutor devido à adesão da argila em suas paredes internas. Com isto, foi possível considerar o condutor como sendo uma estrutura maciça, com raio de 18" (0,4572 m). Essa medida foi necessária para melhorar a transição de malha computacional do revestimento para o ambiente externo, elevando a qualidade dos elementos de malha, como pode ser visto na Figura \ref{fig:historico2}b.
+	Durante a fase de peso próprio, o revestimento do condutor atinge aproximadamente 9,5 metros de profundidade após 5 segundos, penetrando a primeira camada de solo e adentrando a segunda, que apresenta maior resistência. Normalmente, essa fase resulta em profundidades entre 10 e 15 metros, indicando que o valor observado está próximo do esperado.
 	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=1\linewidth]{cravacao/historico2.pdf}
-		\caption{a) Modelo intermediário que foi o ponto de partida para b) o modelo computacional atual em desenvolvimento}
-		\label{fig:historico2}
-	\end{figure}
+Embora a simulação tenha abortado após os 13 m, a Figura \ref{fig:historico2} mostra que solo apresentou um comportamento fisicamente consistente.  Ressalta-se que uma adaptação importante foi considerar o condutor com a ponta fechada. A ponta fechada ocorre devido ao fenômeno de "embuchamento", no qual um \textit{plug} de solo argiloso se forma logo no início da cravação, ocupando a secção transversal do condutor devido à adesão da argila em suas paredes internas. Com isto, foi possível considerar o condutor como sendo uma estrutura maciça, com raio de 18" (0,4572 m). Essa medida foi necessária para melhorar a transição de malha computacional do revestimento para o ambiente externo, elevando a qualidade dos elementos de malha.
+	
+Para garantir a precisão do modelo na previsão da interação solo-estrutura, foi realizada uma calibração com dados operacionais, conforme ilustrado na Figura \ref{fig:cravacao_result3}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{cravacao/cravacao_result3.pdf}
+	\caption{Número acumulado de impactos ao longo da profundidade alcançada somente durante a fase de penetração do martelo. Fonte: Autores (2025)}
+	\label{fig:cravacao_result3}
+\end{figure}
+
+A Figura \ref{fig:cravacao_result3} compara os dados operacionais da indústria (curva azul) com os resultados simulados (curva vermelha), evidenciando um comportamento semelhante entre ambos. Ajustes futuros no modelo e refinamentos nas simplificações aplicadas podem melhorar ainda mais essa correspondência, conforme será visto mais adiante, nos resultados atuais. 
 	
 	
 	
@@ -297,7 +293,7 @@ Neste estudo a respeito da influência do ângulo de dilatância, foi realizada 
 
 Com o objetivo de avaliar a influência do ângulo de dilatância (($\psi$) no comportamento do solo durante o processo de cravação, foram consideradas diferentes variações desse parâmetro, adotando-se os valores de 0°, 5°, 10°, 15° e 20°. Essa estratégia permitiu analisar a sensibilidade da resposta numérica às distintas intensidades de dilatação, possibilitando identificar seus efeitos tanto no comportamento do solo quanto na interação com o revestimento ao longo da simulação.
 
-A análise dos resultados concentrou-se na influência do ângulo de dilatância na profundidade de penetração do condutor ao longo do tempo, conforme apresentado na Figura 3. Observa-se que todas as simulações atingem uma profundidade máxima, porém com taxas de penetração distintas. De modo geral, o aumento do ângulo de dilatância resulta na redução da profundidade alcançada, indicando maior resistência do solo à cravação, como pode ser observado na Figura \ref{fig:Figura_dilatancia01}.
+A análise dos resultados concentrou-se na influência do ângulo de dilatância na profundidade de penetração do condutor ao longo do tempo(Figura \ref{fig:Figura_dilatancia01}). Observa-se que todas as simulações atingem uma profundidade máxima, porém com taxas de penetração distintas. De modo geral, o aumento do ângulo de dilatância resulta na redução da profundidade alcançada, indicando maior resistência do solo à cravação, como pode ser observado na Figura \ref{fig:Figura_dilatancia01}.
 
 	\begin{figure}[H]
 	\centering
@@ -310,7 +306,7 @@ A Figura \ref{fig:Figura_dilatancia02} mostra a distribuição das tensões efet
 
 	\begin{figure}[H]
 	\centering
-	\includegraphics[width=0.3\linewidth]{cravacao/Figura_dilatancia02.pdf}
+	\includegraphics[width=0.6\linewidth]{cravacao/Figura_dilatancia02.pdf}
 	\caption{Magnitude da tensão efetiva ao longo do tempo (Autores, 2025)}
 	\label{fig:Figura_dilatancia02}
 \end{figure}
@@ -327,7 +323,7 @@ Como alternativa para mitigar esse efeito, emprega-se o esquema de integração 
 
 Considerando esse contexto, buscou-se analisar a operação da instalação de revestimento condutor em solos coesivos sob condição não drenada, típicos de ambientes offshore, por meio da comparação entre duas abordagens numéricas: o MPM convencional e o esquema de integração MPM-Mixed, que incorpora integração de Gauss. Assim, teve como objetivo avaliar qual formulação apresentava melhor desempenho e adaptabilidade para a simulação do processo.
 
-A Figura \ref{fig:Figura_mpm01} apresenta a comparação entre os esquemas de integração MPM puro e MPM-Mixed. Observa-se que o MPM puro gera distribuições de tensões mais irregulares, com flutuações abruptas e zonas localizadas de alta intensidade, indicando a presença de instabilidades numéricas associadas ao cruzamento de células. Em contraste, o esquema MPM-Mixed produz campos de tensão mais suaves e contínuos, com transições progressivas entre regiões de diferentes magnitudes e redução de picos espúrios próximos às fronteiras rígidas. 
+A Figura \ref{fig:Figura_mpm01} apresenta a comparação entre os esquemas de integração entre o MPM puro e o MPM-Mixed. Observa-se que o MPM puro gera distribuições de tensões mais irregulares, com flutuações abruptas e zonas localizadas de alta intensidade, indicando a presença de instabilidades numéricas associadas ao cruzamento de células. Em contraste, o esquema MPM-Mixed produz campos de tensão mais suaves e contínuos, com transições progressivas entre regiões de diferentes magnitudes e redução de picos espúrios próximos às fronteiras rígidas. 
 
 	\begin{figure}[H]
 	\centering
