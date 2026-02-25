@@ -162,7 +162,7 @@ A Figura \ref{fig:cravacao_result3} compara os dados operacionais da indústria 
 		\label{fig:Dominio_cracavao}
 	\end{figure}
 	
-	\subsubsection{Propriedades dos materiais}
+	\subsection{Propriedades dos materiais}
 	
 	A definição adequada das propriedades dos materiais e dos parâmetros do modelo constitutivo é essencial para garantir a representatividade das simulações numéricas. Assim, de acordo com os dados de resistência à compressão foi possível classificar o solo como uma argila muito mole, considerando-se o critério adotado por \citet{maragon2008}.
 	
@@ -270,7 +270,7 @@ A Figura \ref{fig:cravacao_result3} compara os dados operacionais da indústria 
 	Para seguir com os desenvolvimentos, foram necessárias algumas análises nas propriedades físicas do solo, a fim de entender como tais parâmetros influenciam na descida do revestimento condutor do solo. Esta análise é importante por mostrar sob quais condições de solo é possível e economicamente viável utilizar a técnica de início de poço por cravação. Com a finalidade de otimizar ainda mais o modelo de cravação, estudos numéricos continuam sendo realizados, em termos de melhoramento de malha computacional e métodos de integração mais adequados. Em sequência, seguem os estudos paramétricos de tais análises, assim como o resultado do modelo numérico de cravação de revestimento condutor atualizado.
 	
 	
-		\subsection{Análise da influência do ângulo de dilatância}
+		\subsubsection{Análise da influência do ângulo de dilatância}
 	
 	Com base nas propriedades definidas para o solo e para o condutor, foram realizadas análises numéricas destinadas a investigar a influência dos parâmetros constitutivos na resposta do sistema. Entre eles, destaca-se o ângulo de dilatância, cuja variação foi utilizada para avaliar seus efeitos no comportamento de penetração e na resistência mobilizada durante a cravação.
 	
@@ -319,7 +319,7 @@ A Figura \ref{fig:cravacao_result3} compara os dados operacionais da indústria 
 	
 	Conclui-se que o ângulo de dilatância exerce influência significativa na resposta do solo durante a cravação do revestimento, afetando a profundidade de penetração e distribuição de tensões. Os resultados evidenciam a sensibilidade do modelo numérico a esse parâmetro e reforçam a importância de sua adequada consideração para representar de forma realista a interação solo-estrutura em solos não coesivos.
 	
-	\subsection{MPM Puro e MPM de integração mista}
+	\subsubsection{MPM Puro e MPM de integração mista}
 	
 	O MPM consiste em uma abordagem híbrida Euleriana-Lagrangiana que combina as vantagens de métodos baseados em partículas e em malha. Nesse contexto, o domínio computacional é discretizado por uma malha Euleriana de fundo, enquanto os corpos materiais são representados por partículas Lagrangianas que transportam todas as propriedades constitutivas, como tensão, deformação e variáveis de histórico, movimentando-se através da malha. Essa dupla representação permite tratar grandes deformações de forma natural, evitando problemas de distorção de malha típicos de formulações puramente Lagrangianas, ao mesmo tempo em que preserva o acompanhamento do histórico do material.
 	
@@ -339,6 +339,42 @@ A Figura \ref{fig:cravacao_result3} compara os dados operacionais da indústria 
 	\end{figure}
 	
 	Além disso, a análise da evolução da profundidade ao longo do tempo mostra que ambos os métodos atingem a profundidade final semelhante, porém a integração mista apresenta maior eficiência computacional, alcançando o resultado em menor tempo. Esses resultados evidenciam a superior estabilidade e desempenho do esquema de integração MPM-Mixed  para a simulação do problema analisado.
+	
+	\subsubsection{Análise de modelos constitutivos}
+	
+	Conforme foi dito anteriormente, o comportamento constitutivo do solo é representado, no momento, pelo modelo de Mohr-Coulomb. A escolha deste modelo ocorreu devido à disponibilidade dos dados fornecidos pela Operadora. Apesar de ser bem consolidado na literatura e, de certa forma, representar de forma coerente o comportamento do solo do modelo numérico de cravação, o modelo de Mohr-Coulomb apresenta limitações para representar de forma eficiente o comportamento de um solo coesivo não drenado, como o que é considerado neste projeto.  
+	
+	A penetração rápida de uma estrutura num solo coesivo não drenado envolve: grandes deformações no solo nas vizinhanças do condutor, velocidades elevadas de cisalhamento que, como consequência, resulta na condição não drenada – ou seja, o solo não consegue drenar a água dos poros – e geração e redistribuição de energia no sistema (\cite{randolph2017offshore}). Este último fenômeno é o mecanismo de dissipação de energia, dado pela Equação \ref{eq:constitutivo}. 
+	
+		\begin{equation}
+		dW=dW^{e}+dW^{p}+dW^{v}
+		\label{eq:constitutivo}
+	\end{equation}
+
+	Na qual,  $dW^{e}$, $dW^{p}$ e $dW^{v}$ são, respectivamente, a energia armazenada elasticamente (recuperável), a energia dissipada por plasticidade e a energia dissipada por viscosidade. A parcela de energia armazenada elasticamente é muito pequena em argilas moles não drenadas. Por outro lado, neste tipo de solo quase toda energia é dissipada pela plasticidade, resultando num cisalhamento irreversível, dominado pelo mecanismo de dissipação por atrito interno (\cite{coussy2004poromechanics}; \cite{houlsby2006principles}). Em solos argilosos, a viscosidade intrínseca faz com que a resistência ao cisalhamento aumente com a velocidade de deformação. Com isso, parte da energia é, então, convertida em calor microscópico. Portanto, $dW^{p}$ é o mecanismo de dissipação de energia predominante num solo coesivo não drenado sob carregamento (\cite{wood1990soil}; \cite{randolph2017offshore}). Além do mais, em solos argilosos, a viscosidade intrínseca eleva a resistência ao cisalhamento com a taxa de deformação (efeito de taxa). Com isso, parte da energia vira calor microscópico (\cite{liu2023mechanisms}).  
+	
+	O modelo de Mohr-Coulomb assume um critério de ruptura simples, com a resistência ao cisalhamento constante, além de caracterizar a dissipação de energia como sendo instantânea e independente da velocidade de cravação. Portanto, este modelo não considera os efeitos viscosos em sua lei constitutiva, não capturando o efeito causado pelas deformações rápidas (\cite{caputo1973mecanica}). Com isto, o carregamento lento ou rápido apresentará a mesma resposta. Por isso, embora bem consolidado, o Mohr-Coulomb é simplificado para a complexidade que a análise do solo em questão exige. Isto incentivou a busca por outros modelos constitutivos, mais recentes, porém, também consolidados na literatura. A exemplo disto, os modelos constitutivos de Drucker-Prager, Cam-Clay e Cam-Clay Viscoplástico, também conhecido como modelo de Perzyna.  
+	
+	A dissipação de energia no modelo de Drucker-Prager é conceitualmente similar à do Mohr-Coulomb, ocorrendo através de trabalho plástico quando atinge a superfície de escoamento. A versão original do Drucker-Prager também é independente da taxa de deformação, assim como o Mohr-Coulomb, no entanto. Ademais, a natureza suave da superfície de escoamento do Drucker-Prager pode levar a uma representação da dissipação de energia ligeiramente diferente em termos de direções de deformação plástica, mas o mecanismo fundamental continua sendo o atrito e a deformação plástica irrecuperável (\cite{drucker1952soil}; \cite{lubliner2008plasticity})..  
+	
+	O modelo de Cam-Clay, por sua vez, mostra como o solo se ajusta até o atingir o seu estado crítico, dissipando a energia plástica e prevendo realisiticamente as poropressões, ajustando o balanço entre a tensão média efetiva e a poropressão. Apesar de mais completo que o modelo de Morh-Coulomb, o Cam-Clay original ainda não inclui os efeitos da taxa de deformação em sua lei constitutiva (\cite{schofield1968critical}).  
+	
+	O modelo de Perzyna, por usa vez, representa uma evolução no modelo de Cam-Clay. Isto porque ele introduz um termo de viscosidade em sua lei constitutiva. Com isso, a deformação plástica não depende apenas do critério de ruptura, mas também do excesso de tensão – que representa o quanto a superfície de plastificação se encontra acima do estado de tensões – e do tempo, representado pela taxa de deformação plástica, que não é instantânea, mas progressiva e governada pelo excesso de tensão. Neste modelo, portanto, a dissipação de energia ocorre em duas parcelas: plástica irreversível e viscosa. Teoricamente, o modelo de Perzyna se adapta bem na representação de um solo coesivo não drenado.  
+	
+	Após a busca destes modelos, o próximo passo foi testá-los, implementando-os no Anura3D, como External Soil Model, já que tais modelos, exceto o Mohr-Coulomb, não vêm implementado no código deste software. A implementação de um novo modelo constitutivo no Anura3D como modelo externo segue uma abordagem estruturada que combina desenvolvimento de código Fortran, compilação em DLL dinâmica e integração via GiD, aproveitando a interface UMAT/ESM padrão inspirada no Abaqus.   
+	
+	O primeiro passo envolve o desenvolvimento das subrotinas principais em Fortran: a ESM (External Soil Model), que atua como interface primária com o Anura3D, e a UMAT (User Material), responsável pela lógica constitutiva propriamente dita. A ESM recebe variáveis do solver como tensões iniciais, incrementos de deformação, propriedades do material, entre outras. Já a UMAT, contém a lógica matemática do comportamento do material (como elasticidade, plasticidade e critérios de ruptura). Essas rotinas usam uma estrutura padrão do Anura3D.  
+	
+	Posteriormente, esse código deverá ser compilado em um arquivo DLL usando ferramentas como Visual Studio com compilador Fortran. No pré-processador GiD, é possível configurar o material como "modelo externo", especificando a DLL compilada e definindo os parâmetros do material. Na Figura \ref{fig:ExternalSoil} está apresentado um exemplo do Tutorial do ANURA 3D de um código teste para ser implementado.  
+	
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{cravacao/ExternalSoil.pdf}
+		\caption{Exemplo de código para implementação de modelo externo Fonte: Tutorial ANURA 3D (2025)}
+		\label{fig:ExternalSoil}
+	\end{figure}
+
+Diante da possibilidade de adoção de novos modelos constitutivos no Anura3D via interface de modelo externo (UMAT/ESM), propõe-se o desenvolvimento de subrotinas específicas para suprir limitações observadas no modelo Mohr-Coulomb, cuja seleção inicial decorreu da escassez de dados experimentais para calibração de alternativas mais avançadas. Paralelamente à codificação das rotinas, pretende-se revisar na literatura especializada para identificar correlações matemáticas, que permitam a calibração e verificação numérica dos novos constitutivos no cenário do problema atual.  
 	
 	\subsection{Atualizações}
 	
@@ -367,4 +403,8 @@ A Figura \ref{fig:cravacao_result3} compara os dados operacionais da indústria 
 	
 	\subsection{Considerações finais}
 	
-	O estudo da cravação do revestimento condutor tem avançado significativamente nas etapas mais recentes, demonstrando que o modelo numérico desenvolvido está alinhado com o problema proposto, desempenhando um papel fundamental na previsão do comportamento do condutor durante a instalação. Nesse contexto, a análise evidenciou a influência das propriedades do solo e das condições de cravação na profundidade final atingida, permitindo ajustes mais precisos nos parâmetros operacionais. No entanto, a modelagem adotada foi limitada a um formato axissimétrico, o que pode restringir a representação completa dos efeitos tridimensionais da interação solo-estrutura, além de outras simplificações relacionadas à etapa de martealmento. Diante disso, estudos futuros devem explorar a ampliação do modelo, visando maior precisão nas simulações e uma compreensão mais detalhada dos fatores que influenciam o processo de cravação.
+O estudo da cravação do revestimento condutor apresentou avanços significativos nas etapas mais recentes, demonstrando que o modelo numérico desenvolvido é coerente com o problema proposto e capaz de representar adequadamente o comportamento do condutor durante a instalação. A análise evidenciou a influência das propriedades do solo e das condições de cravação na profundidade final atingida, permitindo uma avaliação mais precisa dos parâmetros operacionais envolvidos no processo. 
+
+Entretanto, a modelagem adotada foi limitada a uma abordagem axissimétrica, o que pode restringir a representação completa dos efeitos tridimensionais da interação solo-estrutura. Assim, estudos futuros devem contemplar a ampliação do modelo, visando maior fidelidade nas simulações e compreensão mais detalhada dos mecanismos envolvidos na cravação. 
+
+Além disso, pretende-se aprofundar a investigação quanto ao modelo constitutivo empregado, realizar estudos de refinamento e adaptação de malha para ganho de precisão numérica, bem como avaliar a implementação de metodologias que considerem a estrutura parcialmente pré-cravada. 
